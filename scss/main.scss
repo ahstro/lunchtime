@@ -12,7 +12,7 @@ body {
              color: $fg-color;
 }
 
-#changes {
+#mount {
   background-color: #fff;
          max-width: 64rem;
            padding: 2rem;
@@ -20,8 +20,9 @@ body {
             border: 1px solid #a7d7f9;
 }
 
-#changes > div {
+.changes {
   background-color: lighten($bg-color, 1%);
+        margin-top: 1rem;
          word-wrap: break-word;
            padding: $change-padding 0;
             border: 1px solid darken($bg-color, 30%);
