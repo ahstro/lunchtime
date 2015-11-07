@@ -11,7 +11,7 @@ const Stream = React.createClass({
       options: {
         siteGlob: '',
         // TODO: Temporary hackaround to height problem when some
-        // array members are 'log' or 'external' types.
+        //       array members are 'log' or 'external' types.
         types: ['edit', 'new']
       }
     }
@@ -26,7 +26,7 @@ const Stream = React.createClass({
           .concat(this.state.changes)
           // TODO: Allow custom length.
           // TODO: This causes height problems when only viewing
-          // some types of changes, i.e. only 'edit' and 'new's.
+          //       some types of changes, i.e. only 'edit' and 'new's.
           .slice(0, 24)
         })
       }
@@ -47,7 +47,7 @@ const Stream = React.createClass({
 
   handleMouseLeave () {
     // TODO: This is called when the mouse enters the right click menu.
-    // Stop that. Firefox only :(
+    //       Stop that. Firefox only :(
     this.setState({scroll: true})
   },
 
