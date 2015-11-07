@@ -1,7 +1,7 @@
 import React from 'react'
 import io from 'socket.io-client'
-import Change from './change'
-import Settings from './settings'
+import Change from './Change'
+import Settings from './Settings'
 
 const Stream = React.createClass({
   getInitialState () {
