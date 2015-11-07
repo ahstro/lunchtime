@@ -1,10 +1,10 @@
-let React = require('react')
-let Change = require('./change')
-let Settings = require('./settings')
-let io = require('socket.io-client')
+import React from 'react'
+import io from 'socket.io-client'
+import Change from './change'
+import Settings from './settings'
 
-module.exports = React.createClass({
-  getInitialState: function () {
+const Stream = React.createClass({
+  getInitialState () {
     return {
       changes: [],
       scroll: true,
@@ -17,7 +17,7 @@ module.exports = React.createClass({
     }
   },
 
-  renderChange: function (data) {
+  renderChange (data) {
     if (this.state.scroll) {
       if (this.state.options.types.indexOf(data.type) !== -1 &&
          data.server_name.match(this.state.options.siteGlob)) {
@@ -33,34 +33,34 @@ module.exports = React.createClass({
     }
   },
 
-  componentDidMount: function () {
-    let socket = io.connect('stream.wikimedia.org/rc')
+  componentDidMount () {
+    const socket = io.connect('stream.wikimedia.org/rc')
     socket.on('connect', () => {
       socket.emit('subscribe', '*') // TODO: Allow custom sites
     })
     socket.on('change', this.renderChange)
   },
 
-  handleMouseEnter: function () {
+  handleMouseEnter () {
     this.setState({scroll: false})
   },
 
-  handleMouseLeave: function () {
+  handleMouseLeave () {
     // TODO: This is called when the mouse enters the right click menu.
     // Stop that. Firefox only :(
     this.setState({scroll: true})
   },
 
-  setOptions: function (opts) {
-    let newOpts = this.state.options
+  setOptions (opts) {
+    const newOpts = this.state.options
     Object.keys(opts).forEach((key) => {
       newOpts[key] = opts[key]
     })
     this.setState({options: newOpts})
   },
 
-  render: function () {
-    let changes = this.state.changes.map((change) => (
+  render () {
+    const changes = this.state.changes.map((change) => (
       <Change options={this.state.options} {...change} />
     ))
 
@@ -77,3 +77,5 @@ module.exports = React.createClass({
     )
   }
 })
+
+export default Stream

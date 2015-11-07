@@ -1,17 +1,17 @@
-let React = require('react')
+import React from 'react'
 
-module.exports = React.createClass({
+const Settings = React.createClass({
   propTypes: {
     setOptions: React.PropTypes.func
   },
 
-  handleChange: function (e) {
+  handleChange (e) {
     this.props.setOptions({
       siteGlob: Array.from(e.target).filter(target => target.selected)[0].value
     })
   },
 
-  render: function () {
+  render () {
     // TODO: Change names to correct language
     return (
       <div>
@@ -27,3 +27,5 @@ module.exports = React.createClass({
     )
   }
 })
+
+export default Settings

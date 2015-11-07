@@ -1,7 +1,7 @@
-let React = require('react')
+import React from 'react'
 
 // TODO: Maybe rename 'props' to 'change'?
-module.exports = (props) => {
+const Change = (props) => {
   // Do type specific stuff
   // Currently ignore 'log' and 'external' types
   switch (props.type) {
@@ -16,24 +16,24 @@ module.exports = (props) => {
   }
 
   // Check if user is anonymous
-  let anonymous = props.user.match(/\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/)
+  const anonymous = props.user.match(/\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/)
 
   // URL to user's page
-  let userUrl = ((anon) => {
+  const userUrl = ((anon) => {
     return anon
       ? props.server_url + '/wiki/Special:Contributions/' + props.user
       : props.server_url + '/wiki/User:' + props.user
   })(anonymous)
 
   // Set color of user link
-  let userColor = ((bot, anon) => {
+  const userColor = ((bot, anon) => {
     if (bot) return 'black'
     return anon ? 'red' : 'blue'
   })(props.bot, anonymous)
 
   // Set the site code based on site, e.g. [en] for English wikipedia
   // TODO: if(props.wiki.match(/wiktionary/)) console.log(props.wiki)
-  let siteCode = ((wiki) => {
+  const siteCode = ((wiki) => {
     switch (wiki) {
       case 'wikidatawiki': return 'wd'
       case 'commonswiki': return 'cm'
@@ -43,16 +43,16 @@ module.exports = (props) => {
   })(props.wiki)
 
   // URL to diff
-  let diffUrl = props.server_url + props.server_script_path +
+  const diffUrl = props.server_url + props.server_script_path +
     '/index.php?diff=' + props.revision.new
 
   // Set color, size and prefix for edited bytes
-  let editPositive = (!props.length.old || props.length.old < props.length.new)
-  let editPrefix = editPositive ? '+' : '-'
-  let editColor = editPositive ? 'green' : 'red'
-  let editSize = !props.length.old
-    ? props.length.new
-    : Math.abs(props.length.old - props.length.new)
+  const editPositive = (!props.length.old || props.length.old < props.length.new)
+  const editPrefix = editPositive ? '+' : '-'
+  const editColor = editPositive ? 'green' : 'red'
+  const editSize = !props.length.old
+          ? props.length.new
+          : Math.abs(props.length.old - props.length.new)
 
   // TODO: flag-icon-css?
   // TODO: Refactor to use <ul> and <li>?
@@ -69,3 +69,5 @@ module.exports = (props) => {
     </div>
   )
 }
+
+export default Change

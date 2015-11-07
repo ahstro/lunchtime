@@ -1,6 +1,6 @@
-let React = require('react')
-let ReactDOM = require('react-dom')
-let Stream = require('./components/stream')
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Stream from './components/stream'
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
