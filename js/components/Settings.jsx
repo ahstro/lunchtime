@@ -1,13 +1,12 @@
 import React from 'react'
+import Store from '../Store'
 
 const Settings = React.createClass({
-  propTypes: {
-    setOptions: React.PropTypes.func
-  },
-
   handleChange (e) {
-    this.props.setOptions({
-      siteGlob: Array.from(e.target).filter(target => target.selected)[0].value
+    const newSource = Array.from(e.target).filter(target => target.selected)[0].value
+    Store.dispatch({
+      type: 'SET_SOURCE',
+      newSource
     })
   },
 

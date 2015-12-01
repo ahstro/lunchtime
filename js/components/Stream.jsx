@@ -2,28 +2,25 @@ import React from 'react'
 import io from 'socket.io-client'
 import Change from './Change'
 import Settings from './Settings'
+import Store from '../Store'
 
 const Stream = React.createClass({
   getInitialState () {
     return {
       changes: [],
       scroll: true,
-      options: {
-        siteGlob: '',
-        // TODO: Temporary hackaround to height problem when some
-        //       array members are 'log' or 'external' types.
-        types: ['edit', 'new']
-      }
+      settings: Store.getState().settings
     }
   },
 
   renderChange (data) {
-    if (this.state.scroll) {
-      if (this.state.options.types.indexOf(data.type) !== -1 &&
-         data.server_name.match(this.state.options.siteGlob)) {
+    const { scroll, settings, changes } = this.state
+    if (scroll) {
+      if (settings.types.indexOf(data.type) !== -1 &&
+         data.server_name.match(settings.sources)) {
         this.setState({
           changes: [data]
-          .concat(this.state.changes)
+          .concat(changes)
           // TODO: Allow custom length.
           // TODO: This causes height problems when only viewing
           //       some types of changes, i.e. only 'edit' and 'new's.
@@ -39,6 +36,11 @@ const Stream = React.createClass({
       socket.emit('subscribe', '*') // TODO: Allow custom sites
     })
     socket.on('change', this.renderChange)
+    Store.subscribe(this.handleSettingsChange)
+  },
+
+  handleSettingsChange () {
+    this.setState({settings: Store.getState().settings})
   },
 
   handleMouseEnter () {
@@ -51,22 +53,12 @@ const Stream = React.createClass({
     this.setState({scroll: true})
   },
 
-  setOptions (opts) {
-    const newOpts = this.state.options
-    Object.keys(opts).forEach((key) => {
-      newOpts[key] = opts[key]
-    })
-    this.setState({options: newOpts})
-  },
-
   render () {
-    const changes = this.state.changes.map((change) => (
-      <Change options={this.state.options} {...change} />
-    ))
+    const changes = this.state.changes.map(change => <Change {...change} />)
 
     return (
       <div>
-        <Settings setOptions={this.setOptions} />
+        <Settings />
         <div
           className='changes'
           onMouseEnter={this.handleMouseEnter}
