@@ -5,7 +5,7 @@ const Settings = React.createClass({
   handleChange (e) {
     const newSource = Array.from(e.target).filter(target => target.selected)[0].value
     Store.dispatch({
-      type: 'SET_SOURCE',
+      type: 'SET_SOURCES',
       newSource
     })
   },

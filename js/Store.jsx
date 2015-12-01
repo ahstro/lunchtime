@@ -9,23 +9,17 @@ const INITIAL_STATE = {
   }
 }
 
-const setSource = (state, newSource) => (
-  {
-    ...state,
-    settings: {
-      ...state.settings,
-      sources: newSource
-    }
-  }
+const updateSettings = (setting) => (state, newSetting) => (
+  {...state, settings: {...state.settings, [setting]: newSetting}}
 )
 
-const setState = (state = INITIAL_STATE, action) => {
+const setSources = updateSettings('sources')
+
+const Store = createStore((state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'SET_SOURCE': return setSource(state, action.newSource)
+    case 'SET_SOURCES': return setSources(state, action.newSource)
     default: return state
   }
-}
-
-const Store = createStore(setState)
+})
 
 export default Store
