@@ -1,18 +1,7 @@
 import React from 'react'
 
 const Change = (change) => {
-  // Do type specific stuff
-  // Currently ignore 'log' and 'external' types
-  switch (change.type) {
-    case 'external':
-      console.log(JSON.stringify(change))
-      return <div></div>
-    case 'log':
-      return <div></div>
-    case 'new':
-      // TODO: Maybe show that the article is newly created somehow?
-      break
-  }
+  const editOrNew = change.type === 'edit' || change.type === 'new'
 
   // Check if user is anonymous
   const anonymous = change.user.match(/\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/)
@@ -42,16 +31,22 @@ const Change = (change) => {
   })(change.wiki)
 
   // URL to diff
-  const diffUrl = change.server_url + change.server_script_path +
-    '/index.php?diff=' + change.revision.new
+  const diffUrl = editOrNew
+    ? `${change.server_url}${change.server_script_path}/index.php?diff=${change.revision.new}`
+    : change.server_url
 
   // Set color, size and prefix for edited bytes
-  const editPositive = (!change.length.old || change.length.old < change.length.new)
-  const editPrefix = editPositive ? '+' : '-'
-  const editColor = editPositive ? 'green' : 'red'
-  const editSize = !change.length.old
-          ? change.length.new
-          : Math.abs(change.length.old - change.length.new)
+  const edit = editOrNew && (() => {
+    const editPositive = (!change.length.old ||
+                           change.length.old < change.length.new)
+    return {
+      prefix: editPositive ? '+' : '-',
+      color: editPositive ? 'green' : 'red',
+      size: !change.length.old
+        ? change.length.new
+        : Math.abs(change.length.old - change.length.new)
+    }
+  })()
 
   // TODO: flag-icon-css?
   // TODO: Refactor to use <ul> and <li>?
@@ -64,7 +59,7 @@ const Change = (change) => {
       <a href={diffUrl}>
         <span className='title' title={change.comment}>{change.title}</span>
       </a>
-      <span className={'edit ' + editColor}>{editPrefix + editSize}</span>
+      {editOrNew && <span className={'edit ' + edit.color}>{edit.prefix + edit.size}</span>}
     </div>
   )
 }

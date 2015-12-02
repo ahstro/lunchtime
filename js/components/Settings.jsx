@@ -30,9 +30,8 @@ const Settings = React.createClass({
     Store.dispatch({ type: 'SET_TYPES', newTypes })
   },
 
-  renderCheckboxes () {
-    const { types } = this.state
-    return ['Edit', 'New', 'Log', 'External'] .map(
+  renderCheckboxes (types) {
+    return ['Edit', 'New', 'Log', 'External'].map(
       (type, _a, _b, loType = type.toLowerCase()) => (
         <label>
           <input
@@ -64,7 +63,7 @@ const Settings = React.createClass({
           </optgroup>
         </select>
         <form onChange={this.handleTypesChange}>
-          {this.renderCheckboxes()}
+          {this.renderCheckboxes(this.state.types)}
         </form>
       </div>
     )
