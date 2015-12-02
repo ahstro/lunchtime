@@ -1,0 +1,79 @@
+*, *::before, *::after {
+  box-sizing: border-box; }
+
+html {
+  font-size: 14px; }
+
+body {
+  background-color: #f6f6f6;
+  font-family: sans-serif;
+  color: #252525; }
+
+#mount {
+  background-color: #fff;
+  max-width: 64rem;
+  padding: 2rem;
+  margin: 4rem auto;
+  border: 1px solid #a7d7f9; }
+
+.settings {
+  align-items: center;
+  display: flex; }
+  .settings > :nth-child(1n+2) {
+    margin-left: .5rem; }
+  .settings input {
+    margin: 0 .25rem; }
+
+.changes {
+  background-color: #f9f9f9;
+  margin-top: 1rem;
+  word-wrap: break-word;
+  padding: 0.2rem 0;
+  border: 1px solid #aaaaaa; }
+
+.user:hover {
+  text-decoration: none; }
+
+.user.black {
+  color: #252525; }
+
+.user.blue {
+  color: #0645ad; }
+
+.user.red {
+  color: #ba0000; }
+
+/* TODO: This feels ugly.. */
+.edit {
+  /* float: right; */
+  font-size: .7rem;
+  position: absolute;
+  right: 0.2rem;
+  top: .2rem; }
+  .edit.green {
+    color: #02660c; }
+  .edit.red {
+    color: #8b0000; }
+
+.change {
+  position: relative;
+  padding: 0 0.2rem;
+  cursor: default; }
+  .change:hover {
+    background-color: #f1f1f1; }
+
+.minor::after {
+  content: '[M]'; }
+
+.siteCode {
+  font-family: monospace; }
+
+a {
+  text-decoration: none;
+  color: #0645ad; }
+  a:visited {
+    color: #663366; }
+  a:hover {
+    text-decoration: underline; }
+  a:focus {
+    outline: none; }
