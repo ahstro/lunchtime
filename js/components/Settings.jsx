@@ -1,5 +1,6 @@
 import React from 'react'
 import Store from '../Store'
+import { WIKIS } from '../Static'
 
 const Settings = React.createClass({
   getInitialState () {
@@ -44,17 +45,23 @@ const Settings = React.createClass({
     )
   },
 
+  renderWikis (wikis) {
+    return Object.keys(wikis).map(wiki => (
+      <option value={`${wiki}.wikipedia`}>{wikis[wiki]} Wikipedia</option>))
+  },
+
   render () {
     // TODO: Change names to correct language
     return (
       <div className='settings'>
         <select onChange={this.handleSourcesChange} name='wiki'>
           <option value=''>All Sources</option>
-          <option value='wikipedia'>Any Wikipedia</option>
           <option value='wikidata'>Wikidata</option>
           <option value='commons'>Wikimedia Commons</option>
-          <option value='en.wikipedia'>English Wikipedia</option>
-          <option value='sv.wikipedia'>Swedish Wikipedia</option>
+          <optgroup label='Wikipedias'>
+            <option value='wikipedia'>Any Wikipedia</option>
+            {this.renderWikis(WIKIS)}
+          </optgroup>
         </select>
         <form onChange={this.handleTypesChange}>
           {this.renderCheckboxes()}
