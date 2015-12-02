@@ -18,7 +18,8 @@ const Settings = React.createClass({
   },
 
   handleSourcesChange (e) {
-    const newSource = Array.from(e.target).filter(target => target.selected)[0].value
+    const newSource = Array.from(e.target).filter(target => (
+      target.selected))[0].value
     Store.dispatch({ type: 'SET_SOURCES', newSource })
   },
 
@@ -33,8 +34,9 @@ const Settings = React.createClass({
   renderCheckboxes (types) {
     return ['Edit', 'New', 'Log', 'External'].map(
       (type, _a, _b, loType = type.toLowerCase()) => (
-        <label>
+        <label key={type}>
           <input
+            onChange={this.handleTypesChange}
             checked={types.indexOf(loType) !== -1}
             value={loType}
             type='checkbox' />
@@ -46,7 +48,10 @@ const Settings = React.createClass({
 
   renderWikis (wikis) {
     return Object.keys(wikis).map(wiki => (
-      <option value={`${wiki}.wikipedia`}>{wikis[wiki]} Wikipedia</option>))
+      <option key={wiki} value={`${wiki}.wikipedia`}>
+        {wikis[wiki]} Wikipedia
+      </option>
+    ))
   },
 
   render () {
@@ -62,7 +67,7 @@ const Settings = React.createClass({
             {this.renderWikis(WIKIS)}
           </optgroup>
         </select>
-        <form onChange={this.handleTypesChange}>
+        <form>
           {this.renderCheckboxes(this.state.types)}
         </form>
       </div>

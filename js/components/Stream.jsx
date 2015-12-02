@@ -54,7 +54,11 @@ const Stream = React.createClass({
   },
 
   render () {
-    const changes = this.state.changes.map(change => <Change {...change} />)
+    const changes = this.state.changes.map(change => (
+      <Change
+        key={`${change.id || change.log_id || change.log_params.log}-${change.timestamp}`}
+        {...change} />
+    ))
 
     return (
       <div>
