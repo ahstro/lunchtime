@@ -13,11 +13,20 @@ const Stream = React.createClass({
     }
   },
 
+  getUserType(change) {
+    return change.bot ? 'bot'
+      : change.user.match(/\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/)
+        ? 'anonymous'
+        : 'user'
+  },
+
   renderChange (data) {
     const { scroll, settings, changes } = this.state
+    data.userType = this.getUserType(data)
     if (scroll) {
       if (settings.types.indexOf(data.type) !== -1 &&
-         data.server_name.match(settings.sources)) {
+          settings.userTypes.indexOf(data.userType) !== -1 &&
+          data.server_name.match(settings.sources)) {
         this.setState({
           changes: [data]
           .concat(changes)

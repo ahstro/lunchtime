@@ -1,23 +1,21 @@
 import React from 'react'
 
+const COLORS = {
+  anonymous: 'red',
+  user: 'blue',
+  bot: 'black'
+}
+
 const Change = (change) => {
   const editOrNew = change.type === 'edit' || change.type === 'new'
 
-  // Check if user is anonymous
-  const anonymous = change.user.match(/\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/)
-
   // URL to user's page
-  const userUrl = ((anon) => {
-    return anon
-      ? change.server_url + '/wiki/Special:Contributions/' + change.user
-      : change.server_url + '/wiki/User:' + change.user
-  })(anonymous)
+  const userUrl = change.userType === 'anonymous'
+    ? change.server_url + '/wiki/Special:Contributions/' + change.user
+    : change.server_url + '/wiki/User:' + change.user
 
   // Set color of user link
-  const userColor = ((bot, anon) => {
-    if (bot) return 'black'
-    return anon ? 'red' : 'blue'
-  })(change.bot, anonymous)
+  const userColor = COLORS[change.userType]
 
   // Set the site code based on site, e.g. [en] for English wikipedia
   // TODO: if(change.wiki.match(/wiktionary/)) console.log(change.wiki)

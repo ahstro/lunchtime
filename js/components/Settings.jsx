@@ -4,8 +4,10 @@ import { WIKIS } from '../Static'
 
 const Settings = React.createClass({
   getInitialState () {
+    const state = Store.getState()
     return {
-      types: Store.getState().settings.types
+      userTypes: state.settings.userTypes,
+      types: state.settings.types
     }
   },
 
@@ -14,7 +16,15 @@ const Settings = React.createClass({
   },
 
   handleSettingsChange () {
-    this.setState({types: Store.getState().settings.types})
+    this.setState(this.getInitialState())
+  },
+
+  handleUserTypesChange (e) {
+    const { userTypes } = this.state
+    const newUserTypes = userTypes.indexOf(e.target.value) !== -1
+      ? userTypes.filter(type => type !== e.target.value)
+      : userTypes.concat(e.target.value)
+    Store.dispatch({ type: 'SET_USER_TYPES', newUserTypes })
   },
 
   handleSourcesChange (e) {
@@ -31,12 +41,12 @@ const Settings = React.createClass({
     Store.dispatch({ type: 'SET_TYPES', newTypes })
   },
 
-  renderCheckboxes (types) {
-    return ['Edit', 'New', 'Log', 'External'].map(
+  renderCheckboxes (labels, handleChange, types) {
+    return labels.map(
       (type, _a, _b, loType = type.toLowerCase()) => (
         <label key={type}>
           <input
-            onChange={this.handleTypesChange}
+            onChange={handleChange}
             checked={types.indexOf(loType) !== -1}
             value={loType}
             type='checkbox' />
@@ -68,7 +78,10 @@ const Settings = React.createClass({
           </optgroup>
         </select>
         <form>
-          {this.renderCheckboxes(this.state.types)}
+          {this.renderCheckboxes(['Edit', 'New', 'Log', 'External'], this.handleTypesChange, this.state.types)}
+        </form>
+        <form>
+          {this.renderCheckboxes(['Anonymous', 'User', 'Bot'], this.handleUserTypesChange, this.state.userTypes)}
         </form>
       </div>
     )
