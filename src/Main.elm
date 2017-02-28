@@ -91,6 +91,39 @@ decodeChange json =
 changeDecoder : Json.Decode.Decoder Change
 changeDecoder =
     let
+        computeUser : String -> Bool -> User
+        computeUser userName isBot =
+            let
+                isAnonymous =
+                    Regex.contains
+                        (Regex.regex "^\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}$")
+                        userName
+            in
+                if isBot then
+                    Bot userName
+                else if isAnonymous then
+                    Anonymous userName
+                else
+                    Human userName
+
+        computeChangeType : String -> Result String ChangeType
+        computeChangeType changeType =
+            case changeType of
+                "edit" ->
+                    Ok Edit
+
+                "new" ->
+                    Ok New
+
+                "categorize" ->
+                    Ok Categorize
+
+                "log" ->
+                    Ok Log
+
+                _ ->
+                    Err ("No such change type: " ++ changeType)
+
         toChange :
             Maybe Int
             -> String
@@ -101,8 +134,8 @@ changeDecoder =
             succeed
                 (Change
                     id
-                    (getChangeType changeType)
-                    (getUser userName bot)
+                    (computeChangeType changeType)
+                    (computeUser userName bot)
                 )
     in
         decode toChange
@@ -111,42 +144,6 @@ changeDecoder =
             |> required "user" string
             |> required "bot" bool
             |> resolve
-
-
-getUser : String -> Bool -> User
-getUser userName isBot =
-    let
-        isAnonymous =
-            Regex.contains
-                (Regex.regex "^\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}$")
-                userName
-    in
-        if isBot then
-            Bot userName
-        else if isAnonymous then
-            Anonymous userName
-        else
-            Human userName
-
-
-getChangeType changeType =
-    case changeType of
-        "edit" ->
-            Ok Edit
-
-        "new" ->
-            Ok New
-
-        "categorize" ->
-            Ok Categorize
-
-        "log" ->
-            Ok Log
-
-        _ ->
-            Err ("No such change type: " ++ changeType)
-
-
 
 
 changeTypeDecoder : Json.Decode.Decoder ChangeType
