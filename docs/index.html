@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/latest/normalize.css">
+    <title>Lunchtime</title>
+  </head>
+  <body>
+    <script type="text/javascript" src="./lunchtime.js"></script>
+    <script type="text/javascript">
+      const app = Elm.Lunchtime.fullscreen()
+      const eventStream = new EventSource("https://stream.wikimedia.org/v2/stream/recentchange")
+      eventStream.addEventListener("message", e => app.ports.changes.send(e.data))
+    </script>
+  </body>
+</html>
