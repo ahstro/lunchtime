@@ -2,7 +2,7 @@ port module Lunchtime exposing (..)
 
 import Html exposing (Html, text)
 import Json.Decode exposing (int, string, nullable, succeed, fail)
-import Json.Decode.Pipeline exposing (decode, required)
+import Json.Decode.Pipeline exposing (decode, required, resolve)
 import Result exposing (Result(Ok, Err))
 
 
@@ -17,7 +17,7 @@ type Msg
 
 type alias Change =
     { id : Maybe Int
-    , changeType : ChangeType
+    , changeType : Result String ChangeType
     }
 
 
@@ -78,9 +78,39 @@ decodeChange json =
 
 changeDecoder : Json.Decode.Decoder Change
 changeDecoder =
-    decode Change
-        |> required "id" (nullable int)
-        |> required "type" changeTypeDecoder
+    let
+        toChange : Maybe Int -> String -> Json.Decode.Decoder Change
+        toChange id changeType =
+            succeed
+                (Change
+                    id
+                    (getChangeType changeType)
+                )
+    in
+        decode toChange
+            |> required "id" (nullable int)
+            |> required "type" string
+            |> resolve
+
+
+getChangeType changeType =
+    case changeType of
+        "edit" ->
+            Ok Edit
+
+        "new" ->
+            Ok New
+
+        "categorize" ->
+            Ok Categorize
+
+        "log" ->
+            Ok Log
+
+        _ ->
+            Err ("No such change type: " ++ changeType)
+
+
 
 
 changeTypeDecoder : Json.Decode.Decoder ChangeType
