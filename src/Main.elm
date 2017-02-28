@@ -1,9 +1,10 @@
 port module Lunchtime exposing (..)
 
 import Html exposing (Html, text)
-import Json.Decode exposing (int, string, nullable, succeed, fail)
+import Json.Decode exposing (bool, int, string, nullable, succeed, fail)
 import Json.Decode.Pipeline exposing (decode, required, resolve)
 import Result exposing (Result(Ok, Err))
+import Regex
 
 
 type alias Model =
@@ -18,7 +19,18 @@ type Msg
 type alias Change =
     { id : Maybe Int
     , changeType : Result String ChangeType
+    , user : User
     }
+
+
+type User
+    = Anonymous UserName
+    | Human UserName
+    | Bot UserName
+
+
+type alias UserName =
+    String
 
 
 type ChangeType
@@ -79,18 +91,42 @@ decodeChange json =
 changeDecoder : Json.Decode.Decoder Change
 changeDecoder =
     let
-        toChange : Maybe Int -> String -> Json.Decode.Decoder Change
-        toChange id changeType =
+        toChange :
+            Maybe Int
+            -> String
+            -> String
+            -> Bool
+            -> Json.Decode.Decoder Change
+        toChange id changeType userName bot =
             succeed
                 (Change
                     id
                     (getChangeType changeType)
+                    (getUser userName bot)
                 )
     in
         decode toChange
             |> required "id" (nullable int)
             |> required "type" string
+            |> required "user" string
+            |> required "bot" bool
             |> resolve
+
+
+getUser : String -> Bool -> User
+getUser userName isBot =
+    let
+        isAnonymous =
+            Regex.contains
+                (Regex.regex "^\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}$")
+                userName
+    in
+        if isBot then
+            Bot userName
+        else if isAnonymous then
+            Anonymous userName
+        else
+            Human userName
 
 
 getChangeType changeType =
