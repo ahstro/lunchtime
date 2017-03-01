@@ -1,6 +1,6 @@
 port module Lunchtime exposing (..)
 
-import Html exposing (Html, text)
+import Html exposing (Html, div, text)
 import Json.Decode exposing (bool, int, string, nullable, succeed, fail)
 import Json.Decode.Pipeline exposing (decode, required, resolve)
 import Result exposing (Result(Ok, Err))
@@ -8,7 +8,8 @@ import Regex
 
 
 type alias Model =
-    String
+    { changes : List Change
+    }
 
 
 type Msg
@@ -51,19 +52,33 @@ main =
 
 init : ( Model, Cmd msg )
 init =
-    ( "foobar", Cmd.none )
+    ( Model [], Cmd.none )
 
 
-view : Model -> Html msg
+view : Model -> Html Msg
 view model =
-    text model
+    div []
+        [ div [] (List.map viewChange model.changes)
+        ]
+
+
+viewChange : Change -> Html Msg
+viewChange change =
+    div [] [ text (toString change) ]
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
         NewChange change ->
-            ( toString change, Cmd.none )
+            ( { model
+                | changes =
+                    model.changes
+                        |> (::) change
+                        |> List.take 12
+              }
+            , Cmd.none
+            )
 
         NoOp ->
             ( model, Cmd.none )
