@@ -1,0 +1,12 @@
+{
+  "name": "lunchtime",
+  "version": "2.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ahstro/lunchtime.git",
+  "author": "Anton Strömkvist <hi@ahst.ro>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "elm-css": "^0.6.0"
+  }
+}
