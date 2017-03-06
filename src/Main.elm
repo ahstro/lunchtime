@@ -1,10 +1,16 @@
 port module Lunchtime exposing (..)
 
 import Html exposing (Html, div, text)
+import Html.CssHelpers
 import Json.Decode exposing (bool, int, string, nullable, succeed, fail)
 import Json.Decode.Pipeline exposing (decode, required, resolve)
 import Result exposing (Result(Ok, Err))
 import Regex
+import Style
+
+
+{ class } =
+    Html.CssHelpers.withNamespace Style.namespace
 
 
 type alias Model =
@@ -57,8 +63,8 @@ init =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ div [] (List.map viewChange model.changes)
+    div [ class [ Style.Wrapper ] ]
+        [ div [ class [ Style.Changes ] ] (List.map viewChange model.changes)
         ]
 
 
