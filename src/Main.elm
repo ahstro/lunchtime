@@ -79,14 +79,25 @@ view model =
 viewChange : Change -> Html Msg
 viewChange change =
     div [ class [ Style.Change ] ]
-        [ userDot change.user
-        , siteCode change.wiki change.serverName
-        ]
+        (juxt
+            [ userDot
+            , siteCode
+            ]
+            change
+        )
 
 
-userDot : User -> Html Msg
-userDot (User userName userType) =
+juxt : List (a -> b) -> a -> List b
+juxt fs a =
+    List.map (\f -> f a) fs
+
+
+userDot : Change -> Html Msg
+userDot { user } =
     let
+        (User userName userType) =
+            user
+
         className =
             case userType of
                 Anonymous ->
@@ -106,8 +117,8 @@ userDot (User userName userType) =
             []
 
 
-siteCode : String -> String -> Html msg
-siteCode wiki serverName =
+siteCode : Change -> Html msg
+siteCode { wiki, serverName } =
     let
         code =
             case wiki of
