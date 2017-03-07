@@ -1,7 +1,7 @@
 module Style exposing (..)
 
 import Css exposing (..)
-import Css.Elements exposing (html, body)
+import Css.Elements exposing (html, body, a)
 import Css.Namespace
 
 
@@ -40,6 +40,9 @@ css =
             , body
                 [ backgroundColor (hex "f6f6f6")
                 ]
+            , a
+                [ textDecoration none
+                ]
             , class SiteCode
                 [ fontFamily monospace
                 ]
@@ -64,7 +67,6 @@ css =
                 ]
             , class Title
                 [ color blue
-                , textDecoration none
                 , marginLeft (em 0.5)
                 , hover [ textDecoration underline ]
                 ]

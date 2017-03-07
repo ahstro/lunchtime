@@ -31,6 +31,7 @@ type alias Change =
     , user : User
     , wiki : String
     , serverName : String
+    , serverUrl : String
     , changeTitle : String
     , comment : String
     , url : String
@@ -104,10 +105,10 @@ juxt fs a =
 
 
 userDot : Change -> Html Msg
-userDot { user } =
+userDot change =
     let
         (User userName userType) =
-            user
+            change.user
 
         className =
             case userType of
@@ -120,12 +121,27 @@ userDot { user } =
                 Bot ->
                     Style.Black
     in
-        div
+        a
             [ class [ className ]
             , title userName
+            , href (getUserUrl change)
             , Html.Attributes.property "innerHTML" (Json.Encode.string "&#8226;")
             ]
             []
+
+
+getUserUrl : Change -> String
+getUserUrl { user, serverUrl } =
+    let
+        (User userName userType) =
+            user
+    in
+        case userType of
+            Anonymous ->
+                serverUrl ++ "/wiki/Special:Contributions/" ++ userName
+
+            _ ->
+                serverUrl ++ "/wiki/User:" ++ userName
 
 
 siteCode : Change -> Html msg
@@ -277,6 +293,7 @@ changeDecoder =
                         (computeUser userName bot)
                         wiki
                         serverName
+                        serverUrl
                         changeTitle
                         comment
                         (computeUrl
