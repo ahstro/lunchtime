@@ -6,7 +6,8 @@ import Css.Namespace
 
 
 type CssClasses
-    = Wrapper
+    = SiteCode
+    | Wrapper
     | Changes
     | Change
     | Black
@@ -34,6 +35,9 @@ css =
                 [ fontSize (px 14) ]
             , body
                 [ backgroundColor (hex "f6f6f6")
+                ]
+            , class SiteCode
+                [ fontFamily monospace
                 ]
             , class Wrapper
                 [ backgroundColor (hex "ffffff")

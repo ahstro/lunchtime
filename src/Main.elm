@@ -29,6 +29,8 @@ type alias Change =
     { id : Maybe Int
     , changeType : Result String ChangeType
     , user : User
+    , wiki : String
+    , serverName : String
     }
 
 
@@ -78,6 +80,7 @@ viewChange : Change -> Html Msg
 viewChange change =
     div [ class [ Style.Change ] ]
         [ userDot change.user
+        , siteCode change.wiki change.serverName
         ]
 
 
@@ -101,6 +104,27 @@ userDot (User userName userType) =
             , Html.Attributes.property "innerHTML" (Json.Encode.string "&#8226;")
             ]
             []
+
+
+siteCode : String -> String -> Html msg
+siteCode wiki serverName =
+    let
+        code =
+            case wiki of
+                "wikidatawiki" ->
+                    "wd"
+
+                "commonswiki" ->
+                    "cm"
+
+                "metawiki" ->
+                    "me"
+
+                _ ->
+                    String.slice 0 2 wiki
+    in
+        div [ class [ Style.SiteCode ], title serverName ]
+            [ text ("[" ++ code ++ "]") ]
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
@@ -180,13 +204,17 @@ changeDecoder =
             -> String
             -> String
             -> Bool
+            -> String
+            -> String
             -> Json.Decode.Decoder Change
-        toChange id changeType userName bot =
+        toChange id changeType userName bot wiki serverName =
             succeed
                 (Change
                     id
                     (computeChangeType changeType)
                     (computeUser userName bot)
+                    wiki
+                    serverName
                 )
     in
         decode toChange
@@ -194,6 +222,8 @@ changeDecoder =
             |> required "type" string
             |> required "user" string
             |> required "bot" bool
+            |> required "wiki" string
+            |> required "server_name" string
             |> resolve
 
 
