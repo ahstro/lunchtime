@@ -10,6 +10,7 @@ type CssClasses
     | Wrapper
     | Changes
     | Change
+    | Title
     | Black
     | Blue
     | Red
@@ -29,6 +30,9 @@ css =
 
         fgColor =
             (hex "252525")
+
+        blue =
+            (hex "0645ad")
     in
         (stylesheet << Css.Namespace.namespace namespace)
             [ html
@@ -56,7 +60,13 @@ css =
                 [ displayFlex
                 , alignItems center
                 ]
+            , class Title
+                [ color blue
+                , textDecoration none
+                , marginLeft (em 0.5)
+                , hover [ textDecoration underline ]
+                ]
             , class Black [ color fgColor ]
-            , class Blue [ color (hex "0645ad") ]
+            , class Blue [ color blue ]
             , class Red [ color (hex "ba0000") ]
             ]

@@ -1,7 +1,7 @@
 port module Lunchtime exposing (..)
 
-import Html exposing (Html, div, text)
-import Html.Attributes exposing (title)
+import Html exposing (Html, div, text, a)
+import Html.Attributes exposing (title, href)
 import Html.CssHelpers
 import Json.Decode exposing (bool, int, string, nullable, succeed, fail)
 import Json.Decode.Pipeline exposing (decode, required, resolve)
@@ -31,6 +31,16 @@ type alias Change =
     , user : User
     , wiki : String
     , serverName : String
+    , changeTitle : String
+    , comment : String
+    , url : String
+    , revision : Maybe Revision
+    }
+
+
+type alias Revision =
+    { new : Int
+    , old : Int
     }
 
 
@@ -82,6 +92,7 @@ viewChange change =
         (juxt
             [ userDot
             , siteCode
+            , link
             ]
             change
         )
@@ -136,6 +147,16 @@ siteCode { wiki, serverName } =
     in
         div [ class [ Style.SiteCode ], title serverName ]
             [ text ("[" ++ code ++ "]") ]
+
+
+link : Change -> Html msg
+link { url, comment, changeTitle } =
+    a
+        [ href url
+        , class [ Style.Title ]
+        , title comment
+        ]
+        [ text changeTitle ]
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
@@ -210,6 +231,27 @@ changeDecoder =
                 _ ->
                     Err ("No such change type: " ++ changeType)
 
+        computeUrl : Result String ChangeType -> String -> String -> Maybe Revision -> String
+        computeUrl changeType serverUrl serverScriptPath revision =
+            let
+                computedUrl =
+                    case revision of
+                        Just { new } ->
+                            serverUrl ++ serverScriptPath ++ "/index.php?diff=" ++ (toString new)
+
+                        Nothing ->
+                            serverUrl
+            in
+                case changeType of
+                    Ok Edit ->
+                        computedUrl
+
+                    Ok New ->
+                        computedUrl
+
+                    _ ->
+                        serverUrl
+
         toChange :
             Maybe Int
             -> String
@@ -217,16 +259,34 @@ changeDecoder =
             -> Bool
             -> String
             -> String
+            -> String
+            -> String
+            -> String
+            -> String
+            -> Maybe Revision
             -> Json.Decode.Decoder Change
-        toChange id changeType userName bot wiki serverName =
-            succeed
-                (Change
-                    id
+        toChange id changeType userName bot wiki serverName changeTitle comment serverUrl serverScriptPath revision =
+            let
+                computedChangeType =
                     (computeChangeType changeType)
-                    (computeUser userName bot)
-                    wiki
-                    serverName
-                )
+            in
+                succeed
+                    (Change
+                        id
+                        computedChangeType
+                        (computeUser userName bot)
+                        wiki
+                        serverName
+                        changeTitle
+                        comment
+                        (computeUrl
+                            computedChangeType
+                            serverUrl
+                            serverScriptPath
+                            revision
+                        )
+                        revision
+                    )
     in
         decode toChange
             |> required "id" (nullable int)
@@ -235,6 +295,11 @@ changeDecoder =
             |> required "bot" bool
             |> required "wiki" string
             |> required "server_name" string
+            |> required "title" string
+            |> required "comment" string
+            |> required "server_url" string
+            |> required "server_script_path" string
+            |> required "revision" (nullable revisionDecoder)
             |> resolve
 
 
@@ -259,6 +324,13 @@ changeTypeDecoder =
                     fail ("Not a valid change type: " ++ changeType)
     in
         Json.Decode.andThen decodeChangeType string
+
+
+revisionDecoder : Json.Decode.Decoder Revision
+revisionDecoder =
+    decode Revision
+        |> required "new" int
+        |> required "old" int
 
 
 port changes : (String -> msg) -> Sub msg
