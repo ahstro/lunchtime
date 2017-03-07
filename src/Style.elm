@@ -53,12 +53,14 @@ css =
             , class Changes
                 [ backgroundColor (hex "f9f9f9")
                 , overflowWrap breakWord
-                , padding changePadding
+                , padding2 changePadding (rem 0)
                 , border3 (px 1) solid (hex "aaaaaa")
                 ]
             , class Change
                 [ displayFlex
                 , alignItems center
+                , cursor default
+                , hover [ backgroundColor (hex "f1f1f1") ]
                 ]
             , class Title
                 [ color blue
