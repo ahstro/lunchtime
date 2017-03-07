@@ -36,12 +36,19 @@ type alias Change =
     , comment : String
     , url : String
     , revision : Maybe Revision
+    , length : Maybe Length
     }
 
 
 type alias Revision =
     { new : Int
     , old : Int
+    }
+
+
+type alias Length =
+    { new : Int
+    , old : Maybe Int
     }
 
 
@@ -94,6 +101,7 @@ viewChange change =
             [ userDot
             , siteCode
             , link
+            , diff
             ]
             change
         )
@@ -173,6 +181,40 @@ link { url, comment, changeTitle } =
         , title comment
         ]
         [ text changeTitle ]
+
+
+diff : Change -> Html msg
+diff { length } =
+    case length of
+        Just { new, old } ->
+            let
+                ( positive, size ) =
+                    case old of
+                        Just old_ ->
+                            ( old_ < new
+                            , abs (old_ - new)
+                            )
+
+                        Nothing ->
+                            ( True, new )
+
+                prefix =
+                    if positive then
+                        "+"
+                    else
+                        "-"
+
+                className =
+                    if positive then
+                        Style.Green
+                    else
+                        Style.Red
+            in
+                div [ class [ Style.Diff, className ] ]
+                    [ text (prefix ++ (toString size)) ]
+
+        Nothing ->
+            text ""
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
@@ -280,8 +322,9 @@ changeDecoder =
             -> String
             -> String
             -> Maybe Revision
+            -> Maybe Length
             -> Json.Decode.Decoder Change
-        toChange id changeType userName bot wiki serverName changeTitle comment serverUrl serverScriptPath revision =
+        toChange id changeType userName bot wiki serverName changeTitle comment serverUrl serverScriptPath revision length =
             let
                 computedChangeType =
                     (computeChangeType changeType)
@@ -303,6 +346,7 @@ changeDecoder =
                             revision
                         )
                         revision
+                        length
                     )
     in
         decode toChange
@@ -317,6 +361,7 @@ changeDecoder =
             |> required "server_url" string
             |> required "server_script_path" string
             |> required "revision" (nullable revisionDecoder)
+            |> required "length" (nullable lengthDecoder)
             |> resolve
 
 
@@ -348,6 +393,13 @@ revisionDecoder =
     decode Revision
         |> required "new" int
         |> required "old" int
+
+
+lengthDecoder : Json.Decode.Decoder Length
+lengthDecoder =
+    decode Length
+        |> required "new" int
+        |> required "old" (nullable int)
 
 
 port changes : (String -> msg) -> Sub msg

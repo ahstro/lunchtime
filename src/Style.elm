@@ -11,7 +11,9 @@ type CssClasses
     | Changes
     | Change
     | Title
+    | Green
     | Black
+    | Diff
     | Blue
     | Red
 
@@ -70,6 +72,13 @@ css =
                 , marginLeft (em 0.5)
                 , hover [ textDecoration underline ]
                 ]
+            , class Diff
+                [ fontSize (em 0.7)
+                , flexGrow (int 1)
+                , textAlign right
+                , marginRight changePadding
+                ]
+            , class Green [ color (hex "02660c") ]
             , class Black [ color fgColor ]
             , class Blue [ color blue ]
             , class Red [ color (hex "ba0000") ]
