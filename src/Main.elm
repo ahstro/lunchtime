@@ -1,9 +1,11 @@
 port module Lunchtime exposing (..)
 
 import Html exposing (Html, div, text)
+import Html.Attributes exposing (title)
 import Html.CssHelpers
 import Json.Decode exposing (bool, int, string, nullable, succeed, fail)
 import Json.Decode.Pipeline exposing (decode, required, resolve)
+import Json.Encode
 import Result exposing (Result(Ok, Err))
 import Regex
 import Style
@@ -74,7 +76,31 @@ view model =
 
 viewChange : Change -> Html Msg
 viewChange change =
-    div [] [ text (toString change) ]
+    div [ class [ Style.Change ] ]
+        [ userDot change.user
+        ]
+
+
+userDot : User -> Html Msg
+userDot (User userName userType) =
+    let
+        className =
+            case userType of
+                Anonymous ->
+                    Style.Red
+
+                Human ->
+                    Style.Blue
+
+                Bot ->
+                    Style.Black
+    in
+        div
+            [ class [ className ]
+            , title userName
+            , Html.Attributes.property "innerHTML" (Json.Encode.string "&#8226;")
+            ]
+            []
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
