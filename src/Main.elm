@@ -30,10 +30,14 @@ type alias Change =
     }
 
 
+type UserType
+    = Anonymous
+    | Human
+    | Bot
+
+
 type User
-    = Anonymous UserName
-    | Human UserName
-    | Bot UserName
+    = User UserName UserType
 
 
 type alias UserName =
@@ -121,11 +125,11 @@ changeDecoder =
                         userName
             in
                 if isBot then
-                    Bot userName
+                    User userName Bot
                 else if isAnonymous then
-                    Anonymous userName
+                    User userName Anonymous
                 else
-                    Human userName
+                    User userName Human
 
         computeChangeType : String -> Result String ChangeType
         computeChangeType changeType =
