@@ -68,7 +68,7 @@ css =
             , class Changes
                 [ backgroundColor (hex "f9f9f9")
                 , overflowWrap breakWord
-                , overflow hidden
+                , overflowY auto
                 , flexGrow (int 1)
                 , padding2 changePadding (rem 0)
                 , border3 (px 1) solid (hex "aaaaaa")
