@@ -41,6 +41,8 @@ css =
                 [ fontSize (px 14) ]
             , body
                 [ backgroundColor (hex "f6f6f6")
+                , displayFlex
+                , height (vh 100)
                 ]
             , a
                 [ textDecoration none
@@ -50,7 +52,10 @@ css =
                 ]
             , class Wrapper
                 [ backgroundColor (hex "ffffff")
+                , flexDirection column
+                , displayFlex
                 , maxWidth (rem 64)
+                , flexGrow (int 1)
                 , padding (rem 2)
                 , margin2 (rem 4) auto
                 , border3 (px 1) solid (hex "a7d7f9")
@@ -58,6 +63,8 @@ css =
             , class Changes
                 [ backgroundColor (hex "f9f9f9")
                 , overflowWrap breakWord
+                , overflow hidden
+                , flexGrow (int 1)
                 , padding2 changePadding (rem 0)
                 , border3 (px 1) solid (hex "aaaaaa")
                 ]

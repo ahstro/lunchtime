@@ -239,7 +239,7 @@ update msg model =
                         | changes =
                             model.changes
                                 |> (::) change
-                                |> List.take 12
+                                |> List.take 128
                       }
                     , Cmd.none
                     )
