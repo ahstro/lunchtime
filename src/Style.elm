@@ -37,7 +37,12 @@ css =
             (hex "0645ad")
     in
         (stylesheet << Css.Namespace.namespace namespace)
-            [ html
+            [ everything
+                [ boxSizing borderBox
+                , before [ boxSizing borderBox ]
+                , after [ boxSizing borderBox ]
+                ]
+            , html
                 [ fontSize (px 14) ]
             , body
                 [ backgroundColor (hex "f6f6f6")
