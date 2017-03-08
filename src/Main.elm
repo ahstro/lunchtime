@@ -2,6 +2,7 @@ port module Lunchtime exposing (..)
 
 import Html exposing (Html, div, text, a)
 import Html.Attributes exposing (title, href)
+import Html.Events exposing (onMouseEnter, onMouseLeave)
 import Html.CssHelpers
 import Json.Decode exposing (bool, int, string, nullable, succeed, fail)
 import Json.Decode.Pipeline exposing (decode, required, resolve)
@@ -17,11 +18,14 @@ import Style
 
 type alias Model =
     { changes : List Change
+    , paused : Bool
     }
 
 
 type Msg
     = NewChange Change
+    | Play
+    | Pause
     | NoOp
 
 
@@ -84,13 +88,18 @@ main =
 
 init : ( Model, Cmd msg )
 init =
-    ( Model [], Cmd.none )
+    ( Model [] False, Cmd.none )
 
 
 view : Model -> Html Msg
 view model =
     div [ class [ Style.Wrapper ] ]
-        [ div [ class [ Style.Changes ] ] (List.map viewChange model.changes)
+        [ div
+            [ class [ Style.Changes ]
+            , onMouseEnter Pause
+            , onMouseLeave Play
+            ]
+            (List.map viewChange model.changes)
         ]
 
 
@@ -221,14 +230,25 @@ update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
         NewChange change ->
-            ( { model
-                | changes =
-                    model.changes
-                        |> (::) change
-                        |> List.take 12
-              }
-            , Cmd.none
-            )
+            case model.paused of
+                True ->
+                    update NoOp model
+
+                False ->
+                    ( { model
+                        | changes =
+                            model.changes
+                                |> (::) change
+                                |> List.take 12
+                      }
+                    , Cmd.none
+                    )
+
+        Play ->
+            ( { model | paused = False }, Cmd.none )
+
+        Pause ->
+            ( { model | paused = True }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
