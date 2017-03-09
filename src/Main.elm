@@ -231,24 +231,22 @@ update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
         NewChange change ->
-            case model.paused of
-                True ->
-                    ( { model
-                        | bufferedChanges =
-                            change :: model.bufferedChanges
-                      }
-                    , Cmd.none
-                    )
-
-                False ->
-                    ( { model
-                        | changes =
-                            model.changes
-                                |> (::) change
-                                |> takeMaxChanges
-                      }
-                    , Cmd.none
-                    )
+            if model.paused then
+                ( { model
+                    | bufferedChanges =
+                        change :: model.bufferedChanges
+                  }
+                , Cmd.none
+                )
+            else
+                ( { model
+                    | changes =
+                        model.changes
+                            |> (::) change
+                            |> takeMaxChanges
+                  }
+                , Cmd.none
+                )
 
         Play ->
             ( { model
