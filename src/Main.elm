@@ -308,7 +308,7 @@ isLegalChange settings change =
 
 takeMaxChanges : List a -> List a
 takeMaxChanges =
-    List.take 1024
+    List.take 128
 
 
 subscriptions : Model -> Sub Msg
