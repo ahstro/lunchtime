@@ -20,6 +20,13 @@ type alias Model =
     { changes : List Change
     , bufferedChanges : List Change
     , paused : Bool
+    , settings : Settings
+    }
+
+
+type alias Settings =
+    { changeTypes : List ChangeType
+    , userTypes : List UserType
     }
 
 
@@ -89,7 +96,16 @@ main =
 
 init : ( Model, Cmd msg )
 init =
-    ( Model [] [] False, Cmd.none )
+    ( { changes = []
+      , bufferedChanges = []
+      , paused = False
+      , settings =
+            { changeTypes = [ Edit, New, Log, Categorize ]
+            , userTypes = [ Anonymous, Human, Bot ]
+            }
+      }
+    , Cmd.none
+    )
 
 
 view : Model -> Html Msg
@@ -231,10 +247,14 @@ update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
         NewChange change ->
-            if model.paused then
+            if not (isLegalChange model.settings change) then
+                update NoOp model
+            else if model.paused then
                 ( { model
                     | bufferedChanges =
-                        change :: model.bufferedChanges
+                        model.bufferedChanges
+                            |> (::) change
+                            |> takeMaxChanges
                   }
                 , Cmd.none
                 )
@@ -265,6 +285,25 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+
+isLegalChange : Settings -> Change -> Bool
+isLegalChange settings change =
+    let
+        legalChangeType =
+            case change.changeType of
+                Ok changeType ->
+                    List.member changeType settings.changeTypes
+
+                Err error ->
+                    Debug.log error False
+
+        legalUserType =
+            case change.user of
+                User _ userType ->
+                    List.member userType settings.userTypes
+    in
+        legalChangeType && legalUserType
 
 
 takeMaxChanges : List a -> List a
