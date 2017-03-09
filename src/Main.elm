@@ -18,6 +18,7 @@ import Style
 
 type alias Model =
     { changes : List Change
+    , bufferedChanges : List Change
     , paused : Bool
     }
 
@@ -88,7 +89,7 @@ main =
 
 init : ( Model, Cmd msg )
 init =
-    ( Model [] False, Cmd.none )
+    ( Model [] [] False, Cmd.none )
 
 
 view : Model -> Html Msg
@@ -232,26 +233,45 @@ update msg model =
         NewChange change ->
             case model.paused of
                 True ->
-                    update NoOp model
+                    ( { model
+                        | bufferedChanges =
+                            change :: model.bufferedChanges
+                      }
+                    , Cmd.none
+                    )
 
                 False ->
                     ( { model
                         | changes =
                             model.changes
                                 |> (::) change
-                                |> List.take 1024
+                                |> takeMaxChanges
                       }
                     , Cmd.none
                     )
 
         Play ->
-            ( { model | paused = False }, Cmd.none )
+            ( { model
+                | paused = False
+                , changes =
+                    model.bufferedChanges
+                        |> (++) model.changes
+                        |> takeMaxChanges
+                , bufferedChanges = []
+              }
+            , Cmd.none
+            )
 
         Pause ->
             ( { model | paused = True }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
+
+
+takeMaxChanges : List a -> List a
+takeMaxChanges =
+    List.take 1024
 
 
 subscriptions : Model -> Sub Msg
