@@ -81,7 +81,7 @@ css =
                 ]
             , class Title
                 [ color blue
-                , marginLeft (em 0.5)
+                , margin2 (em 0) (em 0.5)
                 , hover [ textDecoration underline ]
                 ]
             , class Diff
