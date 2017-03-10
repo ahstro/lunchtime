@@ -59,6 +59,7 @@ css =
             , class CheckboxLabel
                 [ displayFlex
                 , alignItems center
+                , marginLeft (em 0.5)
                 ]
             , class CheckboxTitle
                 [ fontWeight bold
@@ -66,7 +67,7 @@ css =
             , class Checkboxes
                 [ displayFlex
                 , alignItems center
-                , marginLeft (em 0.5)
+                , marginLeft (em 1)
                 , firstChild [ marginLeft (em 0) ]
                 ]
             , class SiteCode
@@ -74,6 +75,8 @@ css =
                 ]
             , class Settings
                 [ displayFlex
+                , marginBottom (em 0.5)
+                , flexShrink (int 0)
                 ]
             , class Wrapper
                 [ backgroundColor (hex "ffffff")
@@ -89,6 +92,7 @@ css =
                 [ backgroundColor (hex "f9f9f9")
                 , overflowWrap breakWord
                 , overflowY auto
+                , overflowX hidden
                 , flexGrow (int 1)
                 , padding2 changePadding (rem 0)
                 , border3 (px 1) solid (hex "aaaaaa")
