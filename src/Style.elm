@@ -6,7 +6,11 @@ import Css.Namespace
 
 
 type CssClasses
-    = SiteCode
+    = CheckboxLabel
+    | CheckboxTitle
+    | Checkboxes
+    | SiteCode
+    | Settings
     | Wrapper
     | Changes
     | Change
@@ -52,8 +56,24 @@ css =
             , a
                 [ textDecoration none
                 ]
+            , class CheckboxLabel
+                [ displayFlex
+                , alignItems center
+                ]
+            , class CheckboxTitle
+                [ fontWeight bold
+                ]
+            , class Checkboxes
+                [ displayFlex
+                , alignItems center
+                , marginLeft (em 0.5)
+                , firstChild [ marginLeft (em 0) ]
+                ]
             , class SiteCode
                 [ fontFamily monospace
+                ]
+            , class Settings
+                [ displayFlex
                 ]
             , class Wrapper
                 [ backgroundColor (hex "ffffff")

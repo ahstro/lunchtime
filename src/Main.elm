@@ -1,8 +1,8 @@
 port module Lunchtime exposing (..)
 
-import Html exposing (Html, div, text, a)
-import Html.Attributes exposing (title, href)
-import Html.Events exposing (onMouseEnter, onMouseLeave)
+import Html exposing (Html, label, input, span, div, text, a)
+import Html.Attributes exposing (checked, title, href, type_)
+import Html.Events exposing (onMouseEnter, onMouseLeave, onClick)
 import Html.CssHelpers
 import Json.Decode exposing (bool, int, string, nullable, succeed, fail)
 import Json.Decode.Pipeline exposing (decode, required, resolve)
@@ -31,7 +31,9 @@ type alias Settings =
 
 
 type Msg
-    = NewChange Change
+    = ToggleChangeType ChangeType
+    | ToggleUserType UserType
+    | NewChange Change
     | Play
     | Pause
     | NoOp
@@ -111,13 +113,74 @@ init =
 view : Model -> Html Msg
 view model =
     div [ class [ Style.Wrapper ] ]
-        [ div
-            [ class [ Style.Changes ]
-            , onMouseEnter Pause
-            , onMouseLeave Play
-            ]
-            (List.map viewChange model.changes)
+        [ viewSettings model.settings
+        , viewChanges model.changes
         ]
+
+
+viewSettings : Settings -> Html Msg
+viewSettings settings =
+    div
+        [ class [ Style.Settings ] ]
+        [ div [ class [ Style.Checkboxes ] ]
+            [ viewCheckboxTitle "Change types:"
+            , viewChangeCheckbox Edit settings.changeTypes
+            , viewChangeCheckbox New settings.changeTypes
+            , viewChangeCheckbox Log settings.changeTypes
+            , viewChangeCheckbox Categorize settings.changeTypes
+            ]
+        , div [ class [ Style.Checkboxes ] ]
+            [ viewCheckboxTitle "User types:"
+            , viewUserCheckbox Anonymous settings.userTypes
+            , viewUserCheckbox Human settings.userTypes
+            , viewUserCheckbox Bot settings.userTypes
+            ]
+        ]
+
+
+viewCheckboxTitle : String -> Html Msg
+viewCheckboxTitle txt =
+    span
+        [ class [ Style.CheckboxTitle ] ]
+        [ text txt ]
+
+
+viewChangeCheckbox : ChangeType -> List ChangeType -> Html Msg
+viewChangeCheckbox changeType changeTypes =
+    viewCheckbox
+        (List.member changeType changeTypes)
+        (ToggleChangeType changeType)
+        (toString changeType)
+
+
+viewUserCheckbox : UserType -> List UserType -> Html Msg
+viewUserCheckbox userType userTypes =
+    viewCheckbox
+        (List.member userType userTypes)
+        (ToggleUserType userType)
+        (toString userType)
+
+
+viewCheckbox chckd msg txt =
+    label [ class [ Style.CheckboxLabel ] ]
+        [ input
+            [ checked chckd
+            , type_ "checkbox"
+            , onClick msg
+            ]
+            []
+        , text txt
+        ]
+
+
+viewChanges : List Change -> Html Msg
+viewChanges changes =
+    div
+        [ class [ Style.Changes ]
+        , onMouseEnter Pause
+        , onMouseLeave Play
+        ]
+        (List.map viewChange changes)
 
 
 viewChange : Change -> Html Msg
@@ -243,9 +306,43 @@ diff { length } =
             text ""
 
 
+toggle : a -> List a -> List a
+toggle member list =
+    if List.member member list then
+        List.filter ((/=) member) list
+    else
+        member :: list
+
+
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
+        ToggleChangeType changeType ->
+            let
+                { settings } =
+                    model
+
+                newChangeTypes =
+                    toggle changeType settings.changeTypes
+
+                newSettings =
+                    { settings | changeTypes = newChangeTypes }
+            in
+                ( { model | settings = newSettings }, Cmd.none )
+
+        ToggleUserType userType ->
+            let
+                { settings } =
+                    model
+
+                newUserTypes =
+                    toggle userType settings.userTypes
+
+                newSettings =
+                    { settings | userTypes = newUserTypes }
+            in
+                ( { model | settings = newSettings }, Cmd.none )
+
         NewChange change ->
             if not (isLegalChange model.settings change) then
                 update NoOp model
