@@ -13933,7 +13933,12 @@ var _ahstro$lunchtime$Style$css = function () {
 									_1: {
 										ctor: '::',
 										_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: _rtfeldman$elm_css$Css$marginLeft(
+												_rtfeldman$elm_css$Css$em(0.5)),
+											_1: {ctor: '[]'}
+										}
 									}
 								}),
 							_1: {
@@ -13960,7 +13965,7 @@ var _ahstro$lunchtime$Style$css = function () {
 												_1: {
 													ctor: '::',
 													_0: _rtfeldman$elm_css$Css$marginLeft(
-														_rtfeldman$elm_css$Css$em(0.5)),
+														_rtfeldman$elm_css$Css$em(1)),
 													_1: {
 														ctor: '::',
 														_0: _rtfeldman$elm_css$Css$firstChild(
@@ -13993,7 +13998,17 @@ var _ahstro$lunchtime$Style$css = function () {
 												{
 													ctor: '::',
 													_0: _rtfeldman$elm_css$Css$displayFlex,
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: _rtfeldman$elm_css$Css$marginBottom(
+															_rtfeldman$elm_css$Css$em(0.5)),
+														_1: {
+															ctor: '::',
+															_0: _rtfeldman$elm_css$Css$flexShrink(
+																_rtfeldman$elm_css$Css$int(0)),
+															_1: {ctor: '[]'}
+														}
+													}
 												}),
 											_1: {
 												ctor: '::',
@@ -14061,22 +14076,26 @@ var _ahstro$lunchtime$Style$css = function () {
 																	_0: _rtfeldman$elm_css$Css$overflowY(_rtfeldman$elm_css$Css$auto),
 																	_1: {
 																		ctor: '::',
-																		_0: _rtfeldman$elm_css$Css$flexGrow(
-																			_rtfeldman$elm_css$Css$int(1)),
+																		_0: _rtfeldman$elm_css$Css$overflowX(_rtfeldman$elm_css$Css$hidden),
 																		_1: {
 																			ctor: '::',
-																			_0: A2(
-																				_rtfeldman$elm_css$Css$padding2,
-																				changePadding,
-																				rem(0)),
+																			_0: _rtfeldman$elm_css$Css$flexGrow(
+																				_rtfeldman$elm_css$Css$int(1)),
 																			_1: {
 																				ctor: '::',
-																				_0: A3(
-																					_rtfeldman$elm_css$Css$border3,
-																					_rtfeldman$elm_css$Css$px(1),
-																					_rtfeldman$elm_css$Css$solid,
-																					_rtfeldman$elm_css$Css$hex('aaaaaa')),
-																				_1: {ctor: '[]'}
+																				_0: A2(
+																					_rtfeldman$elm_css$Css$padding2,
+																					changePadding,
+																					rem(0)),
+																				_1: {
+																					ctor: '::',
+																					_0: A3(
+																						_rtfeldman$elm_css$Css$border3,
+																						_rtfeldman$elm_css$Css$px(1),
+																						_rtfeldman$elm_css$Css$solid,
+																						_rtfeldman$elm_css$Css$hex('aaaaaa')),
+																					_1: {ctor: '[]'}
+																				}
 																			}
 																		}
 																	}

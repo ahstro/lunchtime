@@ -27,6 +27,7 @@ a {
 .lunchtimeCheckboxLabel {
     display: flex;
     align-items: center;
+    margin-left: 0.5em;
 }
 
 .lunchtimeCheckboxTitle {
@@ -36,7 +37,7 @@ a {
 .lunchtimeCheckboxes {
     display: flex;
     align-items: center;
-    margin-left: 0.5em;
+    margin-left: 1em;
 }
 
 .lunchtimeCheckboxes:first-child {
@@ -49,6 +50,8 @@ a {
 
 .lunchtimeSettings {
     display: flex;
+    margin-bottom: 0.5em;
+    flex-shrink: 0;
 }
 
 .lunchtimeWrapper {
@@ -66,6 +69,7 @@ a {
     background-color: #f9f9f9;
     overflow-wrap: break-word;
     overflow-y: auto;
+    overflow-x: hidden;
     flex-grow: 1;
     padding: 0.2rem 0rem;
     border: 1px solid #aaaaaa;
