@@ -26,6 +26,10 @@ namespace =
     "lunchtime"
 
 
+webkitScrollbar =
+    pseudoElement "-webkit-scrollbar"
+
+
 css =
     let
         rem =
@@ -90,6 +94,7 @@ css =
                 ]
             , class Changes
                 [ backgroundColor (hex "f9f9f9")
+                , webkitScrollbar [ display none ]
                 , overflowWrap breakWord
                 , overflowY auto
                 , overflowX hidden
