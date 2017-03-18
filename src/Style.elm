@@ -111,6 +111,7 @@ css =
             , class Title
                 [ color blue
                 , margin2 (em 0) (em 0.5)
+                , visited [ color (hex "663366") ]
                 , hover [ textDecoration underline ]
                 ]
             , class Diff
