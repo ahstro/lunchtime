@@ -10,6 +10,6 @@
     "elm-css": "^0.6.0"
   },
   "scripts": {
-    "build": "elm make src/Main.elm --output docs/lunchtime.js && elm-css src/Stylesheets.elm --output docs/"
+    "build": "elm make src/Main.elm --output docs/lunchtime.js && elm-css src/Stylesheets.elm --output docs/ ; exit 0"
   }
 }
