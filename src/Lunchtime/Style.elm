@@ -1,4 +1,4 @@
-module Style exposing (..)
+module Lunchtime.Style exposing (..)
 
 import Css exposing (..)
 import Css.Elements exposing (html, body, a)
