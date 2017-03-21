@@ -5837,6 +5837,16 @@ var _NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required = F3(
 			decoder);
 	});
 
+var _ahstro$lunchtime$Helpers$juxt = F2(
+	function (fs, a) {
+		return A2(
+			_elm_lang$core$List$map,
+			function (f) {
+				return f(a);
+			},
+			fs);
+	});
+
 var _elm_lang$virtual_dom$VirtualDom_Debug$wrap;
 var _elm_lang$virtual_dom$VirtualDom_Debug$wrapWithFlags;
 
@@ -8609,6 +8619,428 @@ var _rtfeldman$elm_css_helpers$Html_CssHelpers$Namespace = F4(
 		return {$class: a, classList: b, id: c, name: d};
 	});
 
+var _ahstro$lunchtime$Lunchtime_User$Bot = {ctor: 'Bot'};
+var _ahstro$lunchtime$Lunchtime_User$Human = {ctor: 'Human'};
+var _ahstro$lunchtime$Lunchtime_User$Anonymous = {ctor: 'Anonymous'};
+var _ahstro$lunchtime$Lunchtime_User$User = F2(
+	function (a, b) {
+		return {ctor: 'User', _0: a, _1: b};
+	});
+
+var _ahstro$lunchtime$Lunchtime_Change$computeUrl = F4(
+	function (changeType, serverUrl, serverScriptPath, revision) {
+		var computedUrl = function () {
+			var _p0 = revision;
+			if (_p0.ctor === 'Just') {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					serverUrl,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						serverScriptPath,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'/index.php?diff=',
+							_elm_lang$core$Basics$toString(_p0._0.$new))));
+			} else {
+				return serverUrl;
+			}
+		}();
+		var _p1 = changeType;
+		_v1_2:
+		do {
+			if (_p1.ctor === 'Ok') {
+				switch (_p1._0.ctor) {
+					case 'Edit':
+						return computedUrl;
+					case 'New':
+						return computedUrl;
+					default:
+						break _v1_2;
+				}
+			} else {
+				break _v1_2;
+			}
+		} while(false);
+		return serverUrl;
+	});
+var _ahstro$lunchtime$Lunchtime_Change$computeUser = F2(
+	function (userName, isBot) {
+		var isAnonymous = A2(
+			_elm_lang$core$Regex$contains,
+			_elm_lang$core$Regex$regex('^\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}$'),
+			userName);
+		return isBot ? A2(_ahstro$lunchtime$Lunchtime_User$User, userName, _ahstro$lunchtime$Lunchtime_User$Bot) : (isAnonymous ? A2(_ahstro$lunchtime$Lunchtime_User$User, userName, _ahstro$lunchtime$Lunchtime_User$Anonymous) : A2(_ahstro$lunchtime$Lunchtime_User$User, userName, _ahstro$lunchtime$Lunchtime_User$Human));
+	});
+var _ahstro$lunchtime$Lunchtime_Change$Change = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return {id: a, changeType: b, user: c, wiki: d, serverName: e, serverUrl: f, changeTitle: g, comment: h, url: i, revision: j, length: k};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _ahstro$lunchtime$Lunchtime_Change$Length = F2(
+	function (a, b) {
+		return {$new: a, old: b};
+	});
+var _ahstro$lunchtime$Lunchtime_Change$lengthDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'old',
+	_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$int),
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'new',
+		_elm_lang$core$Json_Decode$int,
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_ahstro$lunchtime$Lunchtime_Change$Length)));
+var _ahstro$lunchtime$Lunchtime_Change$Revision = F2(
+	function (a, b) {
+		return {$new: a, old: b};
+	});
+var _ahstro$lunchtime$Lunchtime_Change$revisionDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'old',
+	_elm_lang$core$Json_Decode$int,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'new',
+		_elm_lang$core$Json_Decode$int,
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_ahstro$lunchtime$Lunchtime_Change$Revision)));
+var _ahstro$lunchtime$Lunchtime_Change$Categorize = {ctor: 'Categorize'};
+var _ahstro$lunchtime$Lunchtime_Change$Log = {ctor: 'Log'};
+var _ahstro$lunchtime$Lunchtime_Change$New = {ctor: 'New'};
+var _ahstro$lunchtime$Lunchtime_Change$Edit = {ctor: 'Edit'};
+var _ahstro$lunchtime$Lunchtime_Change$changeTypeDecoder = function () {
+	var decodeChangeType = function (changeType) {
+		var _p2 = changeType;
+		switch (_p2) {
+			case 'edit':
+				return _elm_lang$core$Json_Decode$succeed(_ahstro$lunchtime$Lunchtime_Change$Edit);
+			case 'new':
+				return _elm_lang$core$Json_Decode$succeed(_ahstro$lunchtime$Lunchtime_Change$New);
+			case 'categorize':
+				return _elm_lang$core$Json_Decode$succeed(_ahstro$lunchtime$Lunchtime_Change$Categorize);
+			case 'log':
+				return _elm_lang$core$Json_Decode$succeed(_ahstro$lunchtime$Lunchtime_Change$Log);
+			default:
+				return _elm_lang$core$Json_Decode$fail(
+					A2(_elm_lang$core$Basics_ops['++'], 'Not a valid change type: ', changeType));
+		}
+	};
+	return A2(_elm_lang$core$Json_Decode$andThen, decodeChangeType, _elm_lang$core$Json_Decode$string);
+}();
+var _ahstro$lunchtime$Lunchtime_Change$computeChangeType = function (changeType) {
+	var _p3 = changeType;
+	switch (_p3) {
+		case 'edit':
+			return _elm_lang$core$Result$Ok(_ahstro$lunchtime$Lunchtime_Change$Edit);
+		case 'new':
+			return _elm_lang$core$Result$Ok(_ahstro$lunchtime$Lunchtime_Change$New);
+		case 'categorize':
+			return _elm_lang$core$Result$Ok(_ahstro$lunchtime$Lunchtime_Change$Categorize);
+		case 'log':
+			return _elm_lang$core$Result$Ok(_ahstro$lunchtime$Lunchtime_Change$Log);
+		default:
+			return _elm_lang$core$Result$Err(
+				A2(_elm_lang$core$Basics_ops['++'], 'No such change type: ', changeType));
+	}
+};
+var _ahstro$lunchtime$Lunchtime_Change$toChange = function (id) {
+	return function (changeType) {
+		return function (userName) {
+			return function (bot) {
+				return function (wiki) {
+					return function (serverName) {
+						return function (changeTitle) {
+							return function (comment) {
+								return function (serverUrl) {
+									return function (serverScriptPath) {
+										return function (revision) {
+											return function (length) {
+												var computedChangeType = _ahstro$lunchtime$Lunchtime_Change$computeChangeType(changeType);
+												return _elm_lang$core$Json_Decode$succeed(
+													_ahstro$lunchtime$Lunchtime_Change$Change(id)(computedChangeType)(
+														A2(_ahstro$lunchtime$Lunchtime_Change$computeUser, userName, bot))(wiki)(serverName)(serverUrl)(changeTitle)(comment)(
+														A4(_ahstro$lunchtime$Lunchtime_Change$computeUrl, computedChangeType, serverUrl, serverScriptPath, revision))(revision)(length));
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _ahstro$lunchtime$Lunchtime_Change$changeDecoder = _NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$resolve(
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'length',
+		_elm_lang$core$Json_Decode$nullable(_ahstro$lunchtime$Lunchtime_Change$lengthDecoder),
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'revision',
+			_elm_lang$core$Json_Decode$nullable(_ahstro$lunchtime$Lunchtime_Change$revisionDecoder),
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'server_script_path',
+				_elm_lang$core$Json_Decode$string,
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'server_url',
+					_elm_lang$core$Json_Decode$string,
+					A3(
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+						'comment',
+						_elm_lang$core$Json_Decode$string,
+						A3(
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+							'title',
+							_elm_lang$core$Json_Decode$string,
+							A3(
+								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+								'server_name',
+								_elm_lang$core$Json_Decode$string,
+								A3(
+									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+									'wiki',
+									_elm_lang$core$Json_Decode$string,
+									A3(
+										_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+										'bot',
+										_elm_lang$core$Json_Decode$bool,
+										A3(
+											_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+											'user',
+											_elm_lang$core$Json_Decode$string,
+											A3(
+												_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+												'type',
+												_elm_lang$core$Json_Decode$string,
+												A3(
+													_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+													'id',
+													_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$int),
+													_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_ahstro$lunchtime$Lunchtime_Change$toChange))))))))))))));
+
+var _ahstro$lunchtime$Lunchtime_Model$init = {
+	ctor: '_Tuple2',
+	_0: {
+		changes: {ctor: '[]'},
+		bufferedChanges: {ctor: '[]'},
+		paused: false,
+		settings: {
+			changeTypes: {
+				ctor: '::',
+				_0: _ahstro$lunchtime$Lunchtime_Change$Edit,
+				_1: {
+					ctor: '::',
+					_0: _ahstro$lunchtime$Lunchtime_Change$New,
+					_1: {
+						ctor: '::',
+						_0: _ahstro$lunchtime$Lunchtime_Change$Log,
+						_1: {
+							ctor: '::',
+							_0: _ahstro$lunchtime$Lunchtime_Change$Categorize,
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			},
+			userTypes: {
+				ctor: '::',
+				_0: _ahstro$lunchtime$Lunchtime_User$Anonymous,
+				_1: {
+					ctor: '::',
+					_0: _ahstro$lunchtime$Lunchtime_User$Human,
+					_1: {
+						ctor: '::',
+						_0: _ahstro$lunchtime$Lunchtime_User$Bot,
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _ahstro$lunchtime$Lunchtime_Model$Model = F4(
+	function (a, b, c, d) {
+		return {changes: a, bufferedChanges: b, paused: c, settings: d};
+	});
+var _ahstro$lunchtime$Lunchtime_Model$Settings = F2(
+	function (a, b) {
+		return {changeTypes: a, userTypes: b};
+	});
+
+var _ahstro$lunchtime$Lunchtime_Update$toggle = F2(
+	function (member, list) {
+		return A2(_elm_lang$core$List$member, member, list) ? A2(
+			_elm_lang$core$List$filter,
+			F2(
+				function (x, y) {
+					return !_elm_lang$core$Native_Utils.eq(x, y);
+				})(member),
+			list) : {ctor: '::', _0: member, _1: list};
+	});
+var _ahstro$lunchtime$Lunchtime_Update$takeMaxChanges = _elm_lang$core$List$take(128);
+var _ahstro$lunchtime$Lunchtime_Update$isLegalChange = F2(
+	function (settings, change) {
+		var legalUserType = function () {
+			var _p0 = change.user;
+			return A2(_elm_lang$core$List$member, _p0._1, settings.userTypes);
+		}();
+		var legalChangeType = function () {
+			var _p1 = change.changeType;
+			if (_p1.ctor === 'Ok') {
+				return A2(_elm_lang$core$List$member, _p1._0, settings.changeTypes);
+			} else {
+				return A2(_elm_lang$core$Debug$log, _p1._0, false);
+			}
+		}();
+		return legalChangeType && legalUserType;
+	});
+var _ahstro$lunchtime$Lunchtime_Update$NoOp = {ctor: 'NoOp'};
+var _ahstro$lunchtime$Lunchtime_Update$update = F2(
+	function (msg, model) {
+		update:
+		while (true) {
+			var _p2 = msg;
+			switch (_p2.ctor) {
+				case 'ToggleChangeType':
+					var _p3 = model;
+					var settings = _p3.settings;
+					var newChangeTypes = A2(_ahstro$lunchtime$Lunchtime_Update$toggle, _p2._0, settings.changeTypes);
+					var newSettings = _elm_lang$core$Native_Utils.update(
+						settings,
+						{changeTypes: newChangeTypes});
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{settings: newSettings}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				case 'ToggleUserType':
+					var _p4 = model;
+					var settings = _p4.settings;
+					var newUserTypes = A2(_ahstro$lunchtime$Lunchtime_Update$toggle, _p2._0, settings.userTypes);
+					var newSettings = _elm_lang$core$Native_Utils.update(
+						settings,
+						{userTypes: newUserTypes});
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{settings: newSettings}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				case 'NewChange':
+					var _p5 = _p2._0;
+					if (!A2(_ahstro$lunchtime$Lunchtime_Update$isLegalChange, model.settings, _p5)) {
+						var _v3 = _ahstro$lunchtime$Lunchtime_Update$NoOp,
+							_v4 = model;
+						msg = _v3;
+						model = _v4;
+						continue update;
+					} else {
+						if (model.paused) {
+							return {
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Native_Utils.update(
+									model,
+									{
+										bufferedChanges: _ahstro$lunchtime$Lunchtime_Update$takeMaxChanges(
+											A2(
+												F2(
+													function (x, y) {
+														return {ctor: '::', _0: x, _1: y};
+													}),
+												_p5,
+												model.bufferedChanges))
+									}),
+								_1: _elm_lang$core$Platform_Cmd$none
+							};
+						} else {
+							return {
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Native_Utils.update(
+									model,
+									{
+										changes: _ahstro$lunchtime$Lunchtime_Update$takeMaxChanges(
+											A2(
+												F2(
+													function (x, y) {
+														return {ctor: '::', _0: x, _1: y};
+													}),
+												_p5,
+												model.changes))
+									}),
+								_1: _elm_lang$core$Platform_Cmd$none
+							};
+						}
+					}
+				case 'Play':
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								paused: false,
+								changes: _ahstro$lunchtime$Lunchtime_Update$takeMaxChanges(
+									A2(
+										F2(
+											function (x, y) {
+												return A2(_elm_lang$core$Basics_ops['++'], x, y);
+											}),
+										model.changes,
+										model.bufferedChanges)),
+								bufferedChanges: {ctor: '[]'}
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				case 'Pause':
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{paused: true}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				default:
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			}
+		}
+	});
+var _ahstro$lunchtime$Lunchtime_Update$Pause = {ctor: 'Pause'};
+var _ahstro$lunchtime$Lunchtime_Update$Play = {ctor: 'Play'};
+var _ahstro$lunchtime$Lunchtime_Update$NewChange = function (a) {
+	return {ctor: 'NewChange', _0: a};
+};
+var _ahstro$lunchtime$Lunchtime_Update$ToggleUserType = function (a) {
+	return {ctor: 'ToggleUserType', _0: a};
+};
+var _ahstro$lunchtime$Lunchtime_Update$ToggleChangeType = function (a) {
+	return {ctor: 'ToggleChangeType', _0: a};
+};
+
 var _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations = function (declarations) {
 	dropEmptyDeclarations:
 	while (true) {
@@ -10985,120 +11417,88 @@ var _rtfeldman$elm_css$Css$withClass = function ($class) {
 			A2(_rtfeldman$elm_css_util$Css_Helpers$identifierToString, '', $class)));
 };
 var _rtfeldman$elm_css$Css$children = _rtfeldman$elm_css$Css_Preprocess$NestSnippet(_rtfeldman$elm_css$Css_Structure$Child);
-var _rtfeldman$elm_css$Css$webkitScrollbar = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('-webkit-scrollbar'));
-var _rtfeldman$elm_css$Css$selection = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('selection'));
-var _rtfeldman$elm_css$Css$firstLine = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('first-line'));
-var _rtfeldman$elm_css$Css$firstLetter = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('first-letter'));
-var _rtfeldman$elm_css$Css$before = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('before'));
-var _rtfeldman$elm_css$Css$after = _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
-	_rtfeldman$elm_css$Css_Structure$PseudoElement('after'));
-var _rtfeldman$elm_css$Css$valid = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('valid'));
-var _rtfeldman$elm_css$Css$target = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('target'));
-var _rtfeldman$elm_css$Css$scope = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('scope'));
-var _rtfeldman$elm_css$Css$root = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('root'));
-var _rtfeldman$elm_css$Css$required = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('required'));
-var _rtfeldman$elm_css$Css$readWrite = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('read-write'));
-var _rtfeldman$elm_css$Css$outOfRange = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('out-of-range'));
-var _rtfeldman$elm_css$Css$optional = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('optional'));
-var _rtfeldman$elm_css$Css$onlyOfType = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('only-of-type'));
-var _rtfeldman$elm_css$Css$onlyChild = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('only-child'));
-var _rtfeldman$elm_css$Css$nthOfType = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'nth-of-type(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+var _rtfeldman$elm_css$Css$pseudoElement = function (element) {
+	return _rtfeldman$elm_css$Css_Preprocess$WithPseudoElement(
+		_rtfeldman$elm_css$Css_Structure$PseudoElement(element));
 };
-var _rtfeldman$elm_css$Css$nthLastOfType = function (str) {
+var _rtfeldman$elm_css$Css$after = _rtfeldman$elm_css$Css$pseudoElement('after');
+var _rtfeldman$elm_css$Css$before = _rtfeldman$elm_css$Css$pseudoElement('before');
+var _rtfeldman$elm_css$Css$firstLetter = _rtfeldman$elm_css$Css$pseudoElement('first-letter');
+var _rtfeldman$elm_css$Css$firstLine = _rtfeldman$elm_css$Css$pseudoElement('first-line');
+var _rtfeldman$elm_css$Css$selection = _rtfeldman$elm_css$Css$pseudoElement('selection');
+var _rtfeldman$elm_css$Css$pseudoClass = function ($class) {
 	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'nth-last-of-type(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector($class));
+};
+var _rtfeldman$elm_css$Css$active = _rtfeldman$elm_css$Css$pseudoClass('active');
+var _rtfeldman$elm_css$Css$any = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'any(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
+};
+var _rtfeldman$elm_css$Css$checked = _rtfeldman$elm_css$Css$pseudoClass('checked');
+var _rtfeldman$elm_css$Css$disabled = _rtfeldman$elm_css$Css$pseudoClass('disabled');
+var _rtfeldman$elm_css$Css$empty = _rtfeldman$elm_css$Css$pseudoClass('empty');
+var _rtfeldman$elm_css$Css$enabled = _rtfeldman$elm_css$Css$pseudoClass('enabled');
+var _rtfeldman$elm_css$Css$first = _rtfeldman$elm_css$Css$pseudoClass('first');
+var _rtfeldman$elm_css$Css$firstChild = _rtfeldman$elm_css$Css$pseudoClass('first-child');
+var _rtfeldman$elm_css$Css$firstOfType = _rtfeldman$elm_css$Css$pseudoClass('first-of-type');
+var _rtfeldman$elm_css$Css$fullscreen = _rtfeldman$elm_css$Css$pseudoClass('fullscreen');
+var _rtfeldman$elm_css$Css$focus = _rtfeldman$elm_css$Css$pseudoClass('focus');
+var _rtfeldman$elm_css$Css$hover = _rtfeldman$elm_css$Css$pseudoClass('hover');
+var _rtfeldman$elm_css$Css$visited = _rtfeldman$elm_css$Css$pseudoClass('visited');
+var _rtfeldman$elm_css$Css$indeterminate = _rtfeldman$elm_css$Css$pseudoClass('indeterminate');
+var _rtfeldman$elm_css$Css$invalid = _rtfeldman$elm_css$Css$pseudoClass('invalid');
+var _rtfeldman$elm_css$Css$lang = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'lang(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
+};
+var _rtfeldman$elm_css$Css$lastChild = _rtfeldman$elm_css$Css$pseudoClass('last-child');
+var _rtfeldman$elm_css$Css$lastOfType = _rtfeldman$elm_css$Css$pseudoClass('last-of-type');
+var _rtfeldman$elm_css$Css$link = _rtfeldman$elm_css$Css$pseudoClass('link');
+var _rtfeldman$elm_css$Css$nthChild = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'nth-child(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
 };
 var _rtfeldman$elm_css$Css$nthLastChild = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'nth-last-child(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'nth-last-child(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
 };
-var _rtfeldman$elm_css$Css$nthChild = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'nth-child(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+var _rtfeldman$elm_css$Css$nthLastOfType = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'nth-last-of-type(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
 };
-var _rtfeldman$elm_css$Css$link = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('link'));
-var _rtfeldman$elm_css$Css$lastOfType = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('last-of-type'));
-var _rtfeldman$elm_css$Css$lastChild = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('last-child'));
-var _rtfeldman$elm_css$Css$lang = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'lang(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
+var _rtfeldman$elm_css$Css$nthOfType = function (str) {
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'nth-of-type(',
+			A2(_elm_lang$core$Basics_ops['++'], str, ')')));
 };
-var _rtfeldman$elm_css$Css$invalid = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('invalid'));
-var _rtfeldman$elm_css$Css$indeterminate = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('indeterminate'));
-var _rtfeldman$elm_css$Css$visited = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('visited'));
-var _rtfeldman$elm_css$Css$hover = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('hover'));
-var _rtfeldman$elm_css$Css$focus = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('focus'));
-var _rtfeldman$elm_css$Css$fullscreen = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('fullscreen'));
-var _rtfeldman$elm_css$Css$firstOfType = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('first-of-type'));
-var _rtfeldman$elm_css$Css$firstChild = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('first-child'));
-var _rtfeldman$elm_css$Css$first = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('first'));
-var _rtfeldman$elm_css$Css$enabled = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('enabled'));
-var _rtfeldman$elm_css$Css$empty = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('empty'));
-var _rtfeldman$elm_css$Css$disabled = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('disabled'));
-var _rtfeldman$elm_css$Css$checked = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('checked'));
-var _rtfeldman$elm_css$Css$any = function (str) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'any(',
-				A2(_elm_lang$core$Basics_ops['++'], str, ')'))));
-};
-var _rtfeldman$elm_css$Css$active = _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-	_rtfeldman$elm_css$Css_Structure$PseudoClassSelector('active'));
+var _rtfeldman$elm_css$Css$onlyChild = _rtfeldman$elm_css$Css$pseudoClass('only-child');
+var _rtfeldman$elm_css$Css$onlyOfType = _rtfeldman$elm_css$Css$pseudoClass('only-of-type');
+var _rtfeldman$elm_css$Css$optional = _rtfeldman$elm_css$Css$pseudoClass('optional');
+var _rtfeldman$elm_css$Css$outOfRange = _rtfeldman$elm_css$Css$pseudoClass('out-of-range');
+var _rtfeldman$elm_css$Css$readWrite = _rtfeldman$elm_css$Css$pseudoClass('read-write');
+var _rtfeldman$elm_css$Css$required = _rtfeldman$elm_css$Css$pseudoClass('required');
+var _rtfeldman$elm_css$Css$root = _rtfeldman$elm_css$Css$pseudoClass('root');
+var _rtfeldman$elm_css$Css$scope = _rtfeldman$elm_css$Css$pseudoClass('scope');
+var _rtfeldman$elm_css$Css$target = _rtfeldman$elm_css$Css$pseudoClass('target');
+var _rtfeldman$elm_css$Css$valid = _rtfeldman$elm_css$Css$pseudoClass('valid');
 var _rtfeldman$elm_css$Css$directionalityToString = function (directionality) {
 	var _p2 = directionality;
 	if (_p2.ctor === 'Ltr') {
@@ -11108,15 +11508,14 @@ var _rtfeldman$elm_css$Css$directionalityToString = function (directionality) {
 	}
 };
 var _rtfeldman$elm_css$Css$dir = function (directionality) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$PseudoClassSelector(
+	return _rtfeldman$elm_css$Css$pseudoClass(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'dir(',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				'dir(',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_rtfeldman$elm_css$Css$directionalityToString(directionality),
-					')'))));
+				_rtfeldman$elm_css$Css$directionalityToString(directionality),
+				')')));
 };
 var _rtfeldman$elm_css$Css$propertyWithWarnings = F3(
 	function (warnings, key, value) {
@@ -13837,29 +14236,30 @@ var _rtfeldman$elm_css$Css_Namespace$namespace = F2(
 			snippets);
 	});
 
-var _ahstro$lunchtime$Style$namespace = 'lunchtime';
-var _ahstro$lunchtime$Style$Red = {ctor: 'Red'};
-var _ahstro$lunchtime$Style$Blue = {ctor: 'Blue'};
-var _ahstro$lunchtime$Style$Diff = {ctor: 'Diff'};
-var _ahstro$lunchtime$Style$Black = {ctor: 'Black'};
-var _ahstro$lunchtime$Style$Green = {ctor: 'Green'};
-var _ahstro$lunchtime$Style$Title = {ctor: 'Title'};
-var _ahstro$lunchtime$Style$Change = {ctor: 'Change'};
-var _ahstro$lunchtime$Style$Changes = {ctor: 'Changes'};
-var _ahstro$lunchtime$Style$Wrapper = {ctor: 'Wrapper'};
-var _ahstro$lunchtime$Style$Settings = {ctor: 'Settings'};
-var _ahstro$lunchtime$Style$SiteCode = {ctor: 'SiteCode'};
-var _ahstro$lunchtime$Style$Checkboxes = {ctor: 'Checkboxes'};
-var _ahstro$lunchtime$Style$CheckboxTitle = {ctor: 'CheckboxTitle'};
-var _ahstro$lunchtime$Style$CheckboxLabel = {ctor: 'CheckboxLabel'};
-var _ahstro$lunchtime$Style$css = function () {
+var _ahstro$lunchtime$Lunchtime_Style$webkitScrollbar = _rtfeldman$elm_css$Css$pseudoElement('-webkit-scrollbar');
+var _ahstro$lunchtime$Lunchtime_Style$namespace = 'lunchtime';
+var _ahstro$lunchtime$Lunchtime_Style$Red = {ctor: 'Red'};
+var _ahstro$lunchtime$Lunchtime_Style$Blue = {ctor: 'Blue'};
+var _ahstro$lunchtime$Lunchtime_Style$Diff = {ctor: 'Diff'};
+var _ahstro$lunchtime$Lunchtime_Style$Black = {ctor: 'Black'};
+var _ahstro$lunchtime$Lunchtime_Style$Green = {ctor: 'Green'};
+var _ahstro$lunchtime$Lunchtime_Style$Title = {ctor: 'Title'};
+var _ahstro$lunchtime$Lunchtime_Style$Change = {ctor: 'Change'};
+var _ahstro$lunchtime$Lunchtime_Style$Changes = {ctor: 'Changes'};
+var _ahstro$lunchtime$Lunchtime_Style$Wrapper = {ctor: 'Wrapper'};
+var _ahstro$lunchtime$Lunchtime_Style$Settings = {ctor: 'Settings'};
+var _ahstro$lunchtime$Lunchtime_Style$SiteCode = {ctor: 'SiteCode'};
+var _ahstro$lunchtime$Lunchtime_Style$Checkboxes = {ctor: 'Checkboxes'};
+var _ahstro$lunchtime$Lunchtime_Style$CheckboxTitle = {ctor: 'CheckboxTitle'};
+var _ahstro$lunchtime$Lunchtime_Style$CheckboxLabel = {ctor: 'CheckboxLabel'};
+var _ahstro$lunchtime$Lunchtime_Style$css = function () {
 	var blue = _rtfeldman$elm_css$Css$hex('0645ad');
 	var fgColor = _rtfeldman$elm_css$Css$hex('252525');
 	var rem = _rtfeldman$elm_css$Css$rem;
 	var changePadding = rem(0.2);
 	return function (_p0) {
 		return _rtfeldman$elm_css$Css$stylesheet(
-			A2(_rtfeldman$elm_css$Css_Namespace$namespace, _ahstro$lunchtime$Style$namespace, _p0));
+			A2(_rtfeldman$elm_css$Css_Namespace$namespace, _ahstro$lunchtime$Lunchtime_Style$namespace, _p0));
 	}(
 		{
 			ctor: '::',
@@ -13926,7 +14326,7 @@ var _ahstro$lunchtime$Style$css = function () {
 							ctor: '::',
 							_0: A2(
 								_rtfeldman$elm_css$Css$class,
-								_ahstro$lunchtime$Style$CheckboxLabel,
+								_ahstro$lunchtime$Lunchtime_Style$CheckboxLabel,
 								{
 									ctor: '::',
 									_0: _rtfeldman$elm_css$Css$displayFlex,
@@ -13945,7 +14345,7 @@ var _ahstro$lunchtime$Style$css = function () {
 								ctor: '::',
 								_0: A2(
 									_rtfeldman$elm_css$Css$class,
-									_ahstro$lunchtime$Style$CheckboxTitle,
+									_ahstro$lunchtime$Lunchtime_Style$CheckboxTitle,
 									{
 										ctor: '::',
 										_0: _rtfeldman$elm_css$Css$fontWeight(_rtfeldman$elm_css$Css$bold),
@@ -13955,7 +14355,7 @@ var _ahstro$lunchtime$Style$css = function () {
 									ctor: '::',
 									_0: A2(
 										_rtfeldman$elm_css$Css$class,
-										_ahstro$lunchtime$Style$Checkboxes,
+										_ahstro$lunchtime$Lunchtime_Style$Checkboxes,
 										{
 											ctor: '::',
 											_0: _rtfeldman$elm_css$Css$displayFlex,
@@ -13984,7 +14384,7 @@ var _ahstro$lunchtime$Style$css = function () {
 										ctor: '::',
 										_0: A2(
 											_rtfeldman$elm_css$Css$class,
-											_ahstro$lunchtime$Style$SiteCode,
+											_ahstro$lunchtime$Lunchtime_Style$SiteCode,
 											{
 												ctor: '::',
 												_0: _rtfeldman$elm_css$Css$fontFamily(_rtfeldman$elm_css$Css$monospace),
@@ -13994,7 +14394,7 @@ var _ahstro$lunchtime$Style$css = function () {
 											ctor: '::',
 											_0: A2(
 												_rtfeldman$elm_css$Css$class,
-												_ahstro$lunchtime$Style$Settings,
+												_ahstro$lunchtime$Lunchtime_Style$Settings,
 												{
 													ctor: '::',
 													_0: _rtfeldman$elm_css$Css$displayFlex,
@@ -14014,7 +14414,7 @@ var _ahstro$lunchtime$Style$css = function () {
 												ctor: '::',
 												_0: A2(
 													_rtfeldman$elm_css$Css$class,
-													_ahstro$lunchtime$Style$Wrapper,
+													_ahstro$lunchtime$Lunchtime_Style$Wrapper,
 													{
 														ctor: '::',
 														_0: _rtfeldman$elm_css$Css$backgroundColor(
@@ -14063,38 +14463,47 @@ var _ahstro$lunchtime$Style$css = function () {
 													ctor: '::',
 													_0: A2(
 														_rtfeldman$elm_css$Css$class,
-														_ahstro$lunchtime$Style$Changes,
+														_ahstro$lunchtime$Lunchtime_Style$Changes,
 														{
 															ctor: '::',
 															_0: _rtfeldman$elm_css$Css$backgroundColor(
 																_rtfeldman$elm_css$Css$hex('f9f9f9')),
 															_1: {
 																ctor: '::',
-																_0: _rtfeldman$elm_css$Css$overflowWrap(_rtfeldman$elm_css$Css$breakWord),
+																_0: _ahstro$lunchtime$Lunchtime_Style$webkitScrollbar(
+																	{
+																		ctor: '::',
+																		_0: _rtfeldman$elm_css$Css$display(_rtfeldman$elm_css$Css$none),
+																		_1: {ctor: '[]'}
+																	}),
 																_1: {
 																	ctor: '::',
-																	_0: _rtfeldman$elm_css$Css$overflowY(_rtfeldman$elm_css$Css$auto),
+																	_0: _rtfeldman$elm_css$Css$overflowWrap(_rtfeldman$elm_css$Css$breakWord),
 																	_1: {
 																		ctor: '::',
-																		_0: _rtfeldman$elm_css$Css$overflowX(_rtfeldman$elm_css$Css$hidden),
+																		_0: _rtfeldman$elm_css$Css$overflowY(_rtfeldman$elm_css$Css$auto),
 																		_1: {
 																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$flexGrow(
-																				_rtfeldman$elm_css$Css$int(1)),
+																			_0: _rtfeldman$elm_css$Css$overflowX(_rtfeldman$elm_css$Css$hidden),
 																			_1: {
 																				ctor: '::',
-																				_0: A2(
-																					_rtfeldman$elm_css$Css$padding2,
-																					changePadding,
-																					rem(0)),
+																				_0: _rtfeldman$elm_css$Css$flexGrow(
+																					_rtfeldman$elm_css$Css$int(1)),
 																				_1: {
 																					ctor: '::',
-																					_0: A3(
-																						_rtfeldman$elm_css$Css$border3,
-																						_rtfeldman$elm_css$Css$px(1),
-																						_rtfeldman$elm_css$Css$solid,
-																						_rtfeldman$elm_css$Css$hex('aaaaaa')),
-																					_1: {ctor: '[]'}
+																					_0: A2(
+																						_rtfeldman$elm_css$Css$padding2,
+																						changePadding,
+																						rem(0)),
+																					_1: {
+																						ctor: '::',
+																						_0: A3(
+																							_rtfeldman$elm_css$Css$border3,
+																							_rtfeldman$elm_css$Css$px(1),
+																							_rtfeldman$elm_css$Css$solid,
+																							_rtfeldman$elm_css$Css$hex('aaaaaa')),
+																						_1: {ctor: '[]'}
+																					}
 																				}
 																			}
 																		}
@@ -14106,7 +14515,7 @@ var _ahstro$lunchtime$Style$css = function () {
 														ctor: '::',
 														_0: A2(
 															_rtfeldman$elm_css$Css$class,
-															_ahstro$lunchtime$Style$Change,
+															_ahstro$lunchtime$Lunchtime_Style$Change,
 															{
 																ctor: '::',
 																_0: _rtfeldman$elm_css$Css$displayFlex,
@@ -14134,7 +14543,7 @@ var _ahstro$lunchtime$Style$css = function () {
 															ctor: '::',
 															_0: A2(
 																_rtfeldman$elm_css$Css$class,
-																_ahstro$lunchtime$Style$Title,
+																_ahstro$lunchtime$Lunchtime_Style$Title,
 																{
 																	ctor: '::',
 																	_0: _rtfeldman$elm_css$Css$color(blue),
@@ -14146,13 +14555,23 @@ var _ahstro$lunchtime$Style$css = function () {
 																			_rtfeldman$elm_css$Css$em(0.5)),
 																		_1: {
 																			ctor: '::',
-																			_0: _rtfeldman$elm_css$Css$hover(
+																			_0: _rtfeldman$elm_css$Css$visited(
 																				{
 																					ctor: '::',
-																					_0: _rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$underline),
+																					_0: _rtfeldman$elm_css$Css$color(
+																						_rtfeldman$elm_css$Css$hex('663366')),
 																					_1: {ctor: '[]'}
 																				}),
-																			_1: {ctor: '[]'}
+																			_1: {
+																				ctor: '::',
+																				_0: _rtfeldman$elm_css$Css$hover(
+																					{
+																						ctor: '::',
+																						_0: _rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$underline),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {ctor: '[]'}
+																			}
 																		}
 																	}
 																}),
@@ -14160,7 +14579,7 @@ var _ahstro$lunchtime$Style$css = function () {
 																ctor: '::',
 																_0: A2(
 																	_rtfeldman$elm_css$Css$class,
-																	_ahstro$lunchtime$Style$Diff,
+																	_ahstro$lunchtime$Lunchtime_Style$Diff,
 																	{
 																		ctor: '::',
 																		_0: _rtfeldman$elm_css$Css$fontSize(
@@ -14184,7 +14603,7 @@ var _ahstro$lunchtime$Style$css = function () {
 																	ctor: '::',
 																	_0: A2(
 																		_rtfeldman$elm_css$Css$class,
-																		_ahstro$lunchtime$Style$Green,
+																		_ahstro$lunchtime$Lunchtime_Style$Green,
 																		{
 																			ctor: '::',
 																			_0: _rtfeldman$elm_css$Css$color(
@@ -14195,7 +14614,7 @@ var _ahstro$lunchtime$Style$css = function () {
 																		ctor: '::',
 																		_0: A2(
 																			_rtfeldman$elm_css$Css$class,
-																			_ahstro$lunchtime$Style$Black,
+																			_ahstro$lunchtime$Lunchtime_Style$Black,
 																			{
 																				ctor: '::',
 																				_0: _rtfeldman$elm_css$Css$color(fgColor),
@@ -14205,7 +14624,7 @@ var _ahstro$lunchtime$Style$css = function () {
 																			ctor: '::',
 																			_0: A2(
 																				_rtfeldman$elm_css$Css$class,
-																				_ahstro$lunchtime$Style$Blue,
+																				_ahstro$lunchtime$Lunchtime_Style$Blue,
 																				{
 																					ctor: '::',
 																					_0: _rtfeldman$elm_css$Css$color(blue),
@@ -14215,7 +14634,7 @@ var _ahstro$lunchtime$Style$css = function () {
 																				ctor: '::',
 																				_0: A2(
 																					_rtfeldman$elm_css$Css$class,
-																					_ahstro$lunchtime$Style$Red,
+																					_ahstro$lunchtime$Lunchtime_Style$Red,
 																					{
 																						ctor: '::',
 																						_0: _rtfeldman$elm_css$Css$color(
@@ -14243,72 +14662,36 @@ var _ahstro$lunchtime$Style$css = function () {
 		});
 }();
 
-var _ahstro$lunchtime$Lunchtime$takeMaxChanges = _elm_lang$core$List$take(128);
-var _ahstro$lunchtime$Lunchtime$isLegalChange = F2(
-	function (settings, change) {
-		var legalUserType = function () {
-			var _p0 = change.user;
-			return A2(_elm_lang$core$List$member, _p0._1, settings.userTypes);
-		}();
-		var legalChangeType = function () {
-			var _p1 = change.changeType;
-			if (_p1.ctor === 'Ok') {
-				return A2(_elm_lang$core$List$member, _p1._0, settings.changeTypes);
-			} else {
-				return A2(_elm_lang$core$Debug$log, _p1._0, false);
-			}
-		}();
-		return legalChangeType && legalUserType;
-	});
-var _ahstro$lunchtime$Lunchtime$toggle = F2(
-	function (member, list) {
-		return A2(_elm_lang$core$List$member, member, list) ? A2(
-			_elm_lang$core$List$filter,
-			F2(
-				function (x, y) {
-					return !_elm_lang$core$Native_Utils.eq(x, y);
-				})(member),
-			list) : {ctor: '::', _0: member, _1: list};
-	});
-var _ahstro$lunchtime$Lunchtime$getUserUrl = function (_p2) {
-	var _p3 = _p2;
-	var _p6 = _p3.serverUrl;
-	var _p4 = _p3.user;
-	var userName = _p4._0;
-	var userType = _p4._1;
-	var _p5 = userType;
-	if (_p5.ctor === 'Anonymous') {
+var _ahstro$lunchtime$Lunchtime_View$getUserUrl = function (_p0) {
+	var _p1 = _p0;
+	var _p4 = _p1.serverUrl;
+	var _p2 = _p1.user;
+	var userName = _p2._0;
+	var userType = _p2._1;
+	var _p3 = userType;
+	if (_p3.ctor === 'Anonymous') {
 		return A2(
 			_elm_lang$core$Basics_ops['++'],
-			_p6,
+			_p4,
 			A2(_elm_lang$core$Basics_ops['++'], '/wiki/Special:Contributions/', userName));
 	} else {
 		return A2(
 			_elm_lang$core$Basics_ops['++'],
-			_p6,
+			_p4,
 			A2(_elm_lang$core$Basics_ops['++'], '/wiki/User:', userName));
 	}
 };
-var _ahstro$lunchtime$Lunchtime$juxt = F2(
-	function (fs, a) {
-		return A2(
-			_elm_lang$core$List$map,
-			function (f) {
-				return f(a);
-			},
-			fs);
-	});
-var _ahstro$lunchtime$Lunchtime$_p7 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_ahstro$lunchtime$Style$namespace);
-var _ahstro$lunchtime$Lunchtime$class = _ahstro$lunchtime$Lunchtime$_p7.$class;
-var _ahstro$lunchtime$Lunchtime$viewCheckboxTitle = function (txt) {
+var _ahstro$lunchtime$Lunchtime_View$_p5 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace(_ahstro$lunchtime$Lunchtime_Style$namespace);
+var _ahstro$lunchtime$Lunchtime_View$class = _ahstro$lunchtime$Lunchtime_View$_p5.$class;
+var _ahstro$lunchtime$Lunchtime_View$viewCheckboxTitle = function (txt) {
 	return A2(
 		_elm_lang$html$Html$span,
 		{
 			ctor: '::',
-			_0: _ahstro$lunchtime$Lunchtime$class(
+			_0: _ahstro$lunchtime$Lunchtime_View$class(
 				{
 					ctor: '::',
-					_0: _ahstro$lunchtime$Style$CheckboxTitle,
+					_0: _ahstro$lunchtime$Lunchtime_Style$CheckboxTitle,
 					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
@@ -14319,16 +14702,16 @@ var _ahstro$lunchtime$Lunchtime$viewCheckboxTitle = function (txt) {
 			_1: {ctor: '[]'}
 		});
 };
-var _ahstro$lunchtime$Lunchtime$viewCheckbox = F3(
+var _ahstro$lunchtime$Lunchtime_View$viewCheckbox = F3(
 	function (chckd, msg, txt) {
 		return A2(
 			_elm_lang$html$Html$label,
 			{
 				ctor: '::',
-				_0: _ahstro$lunchtime$Lunchtime$class(
+				_0: _ahstro$lunchtime$Lunchtime_View$class(
 					{
 						ctor: '::',
-						_0: _ahstro$lunchtime$Style$CheckboxLabel,
+						_0: _ahstro$lunchtime$Lunchtime_Style$CheckboxLabel,
 						_1: {ctor: '[]'}
 					}),
 				_1: {ctor: '[]'}
@@ -14358,26 +14741,125 @@ var _ahstro$lunchtime$Lunchtime$viewCheckbox = F3(
 				}
 			});
 	});
-var _ahstro$lunchtime$Lunchtime$userDot = function (change) {
-	var _p8 = change.user;
-	var userName = _p8._0;
-	var userType = _p8._1;
+var _ahstro$lunchtime$Lunchtime_View$viewChangeCheckbox = F2(
+	function (changeType, changeTypes) {
+		return A3(
+			_ahstro$lunchtime$Lunchtime_View$viewCheckbox,
+			A2(_elm_lang$core$List$member, changeType, changeTypes),
+			_ahstro$lunchtime$Lunchtime_Update$ToggleChangeType(changeType),
+			_elm_lang$core$Basics$toString(changeType));
+	});
+var _ahstro$lunchtime$Lunchtime_View$viewUserCheckbox = F2(
+	function (userType, userTypes) {
+		return A3(
+			_ahstro$lunchtime$Lunchtime_View$viewCheckbox,
+			A2(_elm_lang$core$List$member, userType, userTypes),
+			_ahstro$lunchtime$Lunchtime_Update$ToggleUserType(userType),
+			_elm_lang$core$Basics$toString(userType));
+	});
+var _ahstro$lunchtime$Lunchtime_View$viewSettings = function (settings) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _ahstro$lunchtime$Lunchtime_View$class(
+				{
+					ctor: '::',
+					_0: _ahstro$lunchtime$Lunchtime_Style$Settings,
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _ahstro$lunchtime$Lunchtime_View$class(
+						{
+							ctor: '::',
+							_0: _ahstro$lunchtime$Lunchtime_Style$Checkboxes,
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _ahstro$lunchtime$Lunchtime_View$viewCheckboxTitle('Change types:'),
+					_1: {
+						ctor: '::',
+						_0: A2(_ahstro$lunchtime$Lunchtime_View$viewChangeCheckbox, _ahstro$lunchtime$Lunchtime_Change$Edit, settings.changeTypes),
+						_1: {
+							ctor: '::',
+							_0: A2(_ahstro$lunchtime$Lunchtime_View$viewChangeCheckbox, _ahstro$lunchtime$Lunchtime_Change$New, settings.changeTypes),
+							_1: {
+								ctor: '::',
+								_0: A2(_ahstro$lunchtime$Lunchtime_View$viewChangeCheckbox, _ahstro$lunchtime$Lunchtime_Change$Log, settings.changeTypes),
+								_1: {
+									ctor: '::',
+									_0: A2(_ahstro$lunchtime$Lunchtime_View$viewChangeCheckbox, _ahstro$lunchtime$Lunchtime_Change$Categorize, settings.changeTypes),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _ahstro$lunchtime$Lunchtime_View$class(
+							{
+								ctor: '::',
+								_0: _ahstro$lunchtime$Lunchtime_Style$Checkboxes,
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _ahstro$lunchtime$Lunchtime_View$viewCheckboxTitle('User types:'),
+						_1: {
+							ctor: '::',
+							_0: A2(_ahstro$lunchtime$Lunchtime_View$viewUserCheckbox, _ahstro$lunchtime$Lunchtime_User$Anonymous, settings.userTypes),
+							_1: {
+								ctor: '::',
+								_0: A2(_ahstro$lunchtime$Lunchtime_View$viewUserCheckbox, _ahstro$lunchtime$Lunchtime_User$Human, settings.userTypes),
+								_1: {
+									ctor: '::',
+									_0: A2(_ahstro$lunchtime$Lunchtime_View$viewUserCheckbox, _ahstro$lunchtime$Lunchtime_User$Bot, settings.userTypes),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _ahstro$lunchtime$Lunchtime_View$viewUserDot = function (change) {
+	var _p6 = change.user;
+	var userName = _p6._0;
+	var userType = _p6._1;
 	var className = function () {
-		var _p9 = userType;
-		switch (_p9.ctor) {
+		var _p7 = userType;
+		switch (_p7.ctor) {
 			case 'Anonymous':
-				return _ahstro$lunchtime$Style$Red;
+				return _ahstro$lunchtime$Lunchtime_Style$Red;
 			case 'Human':
-				return _ahstro$lunchtime$Style$Blue;
+				return _ahstro$lunchtime$Lunchtime_Style$Blue;
 			default:
-				return _ahstro$lunchtime$Style$Black;
+				return _ahstro$lunchtime$Lunchtime_Style$Black;
 		}
 	}();
 	return A2(
 		_elm_lang$html$Html$a,
 		{
 			ctor: '::',
-			_0: _ahstro$lunchtime$Lunchtime$class(
+			_0: _ahstro$lunchtime$Lunchtime_View$class(
 				{
 					ctor: '::',
 					_0: className,
@@ -14389,7 +14871,7 @@ var _ahstro$lunchtime$Lunchtime$userDot = function (change) {
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$href(
-						_ahstro$lunchtime$Lunchtime$getUserUrl(change)),
+						_ahstro$lunchtime$Lunchtime_View$getUserUrl(change)),
 					_1: {
 						ctor: '::',
 						_0: A2(
@@ -14403,12 +14885,12 @@ var _ahstro$lunchtime$Lunchtime$userDot = function (change) {
 		},
 		{ctor: '[]'});
 };
-var _ahstro$lunchtime$Lunchtime$siteCode = function (_p10) {
-	var _p11 = _p10;
-	var _p13 = _p11.wiki;
+var _ahstro$lunchtime$Lunchtime_View$viewSiteCode = function (_p8) {
+	var _p9 = _p8;
+	var _p11 = _p9.wiki;
 	var code = function () {
-		var _p12 = _p13;
-		switch (_p12) {
+		var _p10 = _p11;
+		switch (_p10) {
 			case 'wikidatawiki':
 				return 'wd';
 			case 'commonswiki':
@@ -14416,22 +14898,22 @@ var _ahstro$lunchtime$Lunchtime$siteCode = function (_p10) {
 			case 'metawiki':
 				return 'me';
 			default:
-				return A3(_elm_lang$core$String$slice, 0, 2, _p13);
+				return A3(_elm_lang$core$String$slice, 0, 2, _p11);
 		}
 	}();
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _ahstro$lunchtime$Lunchtime$class(
+			_0: _ahstro$lunchtime$Lunchtime_View$class(
 				{
 					ctor: '::',
-					_0: _ahstro$lunchtime$Style$SiteCode,
+					_0: _ahstro$lunchtime$Lunchtime_Style$SiteCode,
 					_1: {ctor: '[]'}
 				}),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$title(_p11.serverName),
+				_0: _elm_lang$html$Html_Attributes$title(_p9.serverName),
 				_1: {ctor: '[]'}
 			}
 		},
@@ -14445,64 +14927,64 @@ var _ahstro$lunchtime$Lunchtime$siteCode = function (_p10) {
 			_1: {ctor: '[]'}
 		});
 };
-var _ahstro$lunchtime$Lunchtime$link = function (_p14) {
-	var _p15 = _p14;
+var _ahstro$lunchtime$Lunchtime_View$viewLink = function (_p12) {
+	var _p13 = _p12;
 	return A2(
 		_elm_lang$html$Html$a,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$href(_p15.url),
+			_0: _elm_lang$html$Html_Attributes$href(_p13.url),
 			_1: {
 				ctor: '::',
-				_0: _ahstro$lunchtime$Lunchtime$class(
+				_0: _ahstro$lunchtime$Lunchtime_View$class(
 					{
 						ctor: '::',
-						_0: _ahstro$lunchtime$Style$Title,
+						_0: _ahstro$lunchtime$Lunchtime_Style$Title,
 						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$title(_p15.comment),
+					_0: _elm_lang$html$Html_Attributes$title(_p13.comment),
 					_1: {ctor: '[]'}
 				}
 			}
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p15.changeTitle),
+			_0: _elm_lang$html$Html$text(_p13.changeTitle),
 			_1: {ctor: '[]'}
 		});
 };
-var _ahstro$lunchtime$Lunchtime$diff = function (_p16) {
-	var _p17 = _p16;
-	var _p18 = _p17.length;
-	if (_p18.ctor === 'Just') {
-		var _p22 = _p18._0.$new;
-		var _p19 = function () {
-			var _p20 = _p18._0.old;
-			if (_p20.ctor === 'Just') {
-				var _p21 = _p20._0;
+var _ahstro$lunchtime$Lunchtime_View$viewDiff = function (_p14) {
+	var _p15 = _p14;
+	var _p16 = _p15.length;
+	if (_p16.ctor === 'Just') {
+		var _p20 = _p16._0.$new;
+		var _p17 = function () {
+			var _p18 = _p16._0.old;
+			if (_p18.ctor === 'Just') {
+				var _p19 = _p18._0;
 				return {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.cmp(_p21, _p22) < 0,
-					_1: _elm_lang$core$Basics$abs(_p21 - _p22)
+					_0: _elm_lang$core$Native_Utils.cmp(_p19, _p20) < 0,
+					_1: _elm_lang$core$Basics$abs(_p19 - _p20)
 				};
 			} else {
-				return {ctor: '_Tuple2', _0: true, _1: _p22};
+				return {ctor: '_Tuple2', _0: true, _1: _p20};
 			}
 		}();
-		var positive = _p19._0;
-		var size = _p19._1;
+		var positive = _p17._0;
+		var size = _p17._1;
 		var prefix = positive ? '+' : '-';
-		var className = positive ? _ahstro$lunchtime$Style$Green : _ahstro$lunchtime$Style$Red;
+		var className = positive ? _ahstro$lunchtime$Lunchtime_Style$Green : _ahstro$lunchtime$Lunchtime_Style$Red;
 		return A2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _ahstro$lunchtime$Lunchtime$class(
+				_0: _ahstro$lunchtime$Lunchtime_View$class(
 					{
 						ctor: '::',
-						_0: _ahstro$lunchtime$Style$Diff,
+						_0: _ahstro$lunchtime$Lunchtime_Style$Diff,
 						_1: {
 							ctor: '::',
 							_0: className,
@@ -14524,33 +15006,33 @@ var _ahstro$lunchtime$Lunchtime$diff = function (_p16) {
 		return _elm_lang$html$Html$text('');
 	}
 };
-var _ahstro$lunchtime$Lunchtime$viewChange = function (change) {
+var _ahstro$lunchtime$Lunchtime_View$viewChange = function (change) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _ahstro$lunchtime$Lunchtime$class(
+			_0: _ahstro$lunchtime$Lunchtime_View$class(
 				{
 					ctor: '::',
-					_0: _ahstro$lunchtime$Style$Change,
+					_0: _ahstro$lunchtime$Lunchtime_Style$Change,
 					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
 		},
 		A2(
-			_ahstro$lunchtime$Lunchtime$juxt,
+			_ahstro$lunchtime$Helpers$juxt,
 			{
 				ctor: '::',
-				_0: _ahstro$lunchtime$Lunchtime$userDot,
+				_0: _ahstro$lunchtime$Lunchtime_View$viewUserDot,
 				_1: {
 					ctor: '::',
-					_0: _ahstro$lunchtime$Lunchtime$siteCode,
+					_0: _ahstro$lunchtime$Lunchtime_View$viewSiteCode,
 					_1: {
 						ctor: '::',
-						_0: _ahstro$lunchtime$Lunchtime$link,
+						_0: _ahstro$lunchtime$Lunchtime_View$viewLink,
 						_1: {
 							ctor: '::',
-							_0: _ahstro$lunchtime$Lunchtime$diff,
+							_0: _ahstro$lunchtime$Lunchtime_View$viewDiff,
 							_1: {ctor: '[]'}
 						}
 					}
@@ -14558,559 +15040,69 @@ var _ahstro$lunchtime$Lunchtime$viewChange = function (change) {
 			},
 			change));
 };
-var _ahstro$lunchtime$Lunchtime$changes = _elm_lang$core$Native_Platform.incomingPort('changes', _elm_lang$core$Json_Decode$string);
-var _ahstro$lunchtime$Lunchtime$Model = F4(
-	function (a, b, c, d) {
-		return {changes: a, bufferedChanges: b, paused: c, settings: d};
-	});
-var _ahstro$lunchtime$Lunchtime$Settings = F2(
-	function (a, b) {
-		return {changeTypes: a, userTypes: b};
-	});
-var _ahstro$lunchtime$Lunchtime$Change = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return function (k) {
-											return {id: a, changeType: b, user: c, wiki: d, serverName: e, serverUrl: f, changeTitle: g, comment: h, url: i, revision: j, length: k};
-										};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
-var _ahstro$lunchtime$Lunchtime$Revision = F2(
-	function (a, b) {
-		return {$new: a, old: b};
-	});
-var _ahstro$lunchtime$Lunchtime$revisionDecoder = A3(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'old',
-	_elm_lang$core$Json_Decode$int,
-	A3(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'new',
-		_elm_lang$core$Json_Decode$int,
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_ahstro$lunchtime$Lunchtime$Revision)));
-var _ahstro$lunchtime$Lunchtime$Length = F2(
-	function (a, b) {
-		return {$new: a, old: b};
-	});
-var _ahstro$lunchtime$Lunchtime$lengthDecoder = A3(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'old',
-	_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$int),
-	A3(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'new',
-		_elm_lang$core$Json_Decode$int,
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_ahstro$lunchtime$Lunchtime$Length)));
-var _ahstro$lunchtime$Lunchtime$NoOp = {ctor: 'NoOp'};
-var _ahstro$lunchtime$Lunchtime$update = F2(
-	function (msg, model) {
-		update:
-		while (true) {
-			var _p23 = msg;
-			switch (_p23.ctor) {
-				case 'ToggleChangeType':
-					var _p24 = model;
-					var settings = _p24.settings;
-					var newChangeTypes = A2(_ahstro$lunchtime$Lunchtime$toggle, _p23._0, settings.changeTypes);
-					var newSettings = _elm_lang$core$Native_Utils.update(
-						settings,
-						{changeTypes: newChangeTypes});
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{settings: newSettings}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				case 'ToggleUserType':
-					var _p25 = model;
-					var settings = _p25.settings;
-					var newUserTypes = A2(_ahstro$lunchtime$Lunchtime$toggle, _p23._0, settings.userTypes);
-					var newSettings = _elm_lang$core$Native_Utils.update(
-						settings,
-						{userTypes: newUserTypes});
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{settings: newSettings}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				case 'NewChange':
-					var _p26 = _p23._0;
-					if (!A2(_ahstro$lunchtime$Lunchtime$isLegalChange, model.settings, _p26)) {
-						var _v12 = _ahstro$lunchtime$Lunchtime$NoOp,
-							_v13 = model;
-						msg = _v12;
-						model = _v13;
-						continue update;
-					} else {
-						if (model.paused) {
-							return {
-								ctor: '_Tuple2',
-								_0: _elm_lang$core$Native_Utils.update(
-									model,
-									{
-										bufferedChanges: _ahstro$lunchtime$Lunchtime$takeMaxChanges(
-											A2(
-												F2(
-													function (x, y) {
-														return {ctor: '::', _0: x, _1: y};
-													}),
-												_p26,
-												model.bufferedChanges))
-									}),
-								_1: _elm_lang$core$Platform_Cmd$none
-							};
-						} else {
-							return {
-								ctor: '_Tuple2',
-								_0: _elm_lang$core$Native_Utils.update(
-									model,
-									{
-										changes: _ahstro$lunchtime$Lunchtime$takeMaxChanges(
-											A2(
-												F2(
-													function (x, y) {
-														return {ctor: '::', _0: x, _1: y};
-													}),
-												_p26,
-												model.changes))
-									}),
-								_1: _elm_lang$core$Platform_Cmd$none
-							};
-						}
-					}
-				case 'Play':
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								paused: false,
-								changes: _ahstro$lunchtime$Lunchtime$takeMaxChanges(
-									A2(
-										F2(
-											function (x, y) {
-												return A2(_elm_lang$core$Basics_ops['++'], x, y);
-											}),
-										model.changes,
-										model.bufferedChanges)),
-								bufferedChanges: {ctor: '[]'}
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				case 'Pause':
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{paused: true}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				default:
-					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			}
-		}
-	});
-var _ahstro$lunchtime$Lunchtime$Pause = {ctor: 'Pause'};
-var _ahstro$lunchtime$Lunchtime$Play = {ctor: 'Play'};
-var _ahstro$lunchtime$Lunchtime$viewChanges = function (changes) {
+var _ahstro$lunchtime$Lunchtime_View$viewChanges = function (changes) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _ahstro$lunchtime$Lunchtime$class(
+			_0: _ahstro$lunchtime$Lunchtime_View$class(
 				{
 					ctor: '::',
-					_0: _ahstro$lunchtime$Style$Changes,
+					_0: _ahstro$lunchtime$Lunchtime_Style$Changes,
 					_1: {ctor: '[]'}
 				}),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html_Events$onMouseEnter(_ahstro$lunchtime$Lunchtime$Pause),
+				_0: _elm_lang$html$Html_Events$onMouseEnter(_ahstro$lunchtime$Lunchtime_Update$Pause),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onMouseLeave(_ahstro$lunchtime$Lunchtime$Play),
+					_0: _elm_lang$html$Html_Events$onMouseLeave(_ahstro$lunchtime$Lunchtime_Update$Play),
 					_1: {ctor: '[]'}
 				}
 			}
 		},
-		A2(_elm_lang$core$List$map, _ahstro$lunchtime$Lunchtime$viewChange, changes));
+		A2(_elm_lang$core$List$map, _ahstro$lunchtime$Lunchtime_View$viewChange, changes));
 };
-var _ahstro$lunchtime$Lunchtime$NewChange = function (a) {
-	return {ctor: 'NewChange', _0: a};
-};
-var _ahstro$lunchtime$Lunchtime$ToggleUserType = function (a) {
-	return {ctor: 'ToggleUserType', _0: a};
-};
-var _ahstro$lunchtime$Lunchtime$viewUserCheckbox = F2(
-	function (userType, userTypes) {
-		return A3(
-			_ahstro$lunchtime$Lunchtime$viewCheckbox,
-			A2(_elm_lang$core$List$member, userType, userTypes),
-			_ahstro$lunchtime$Lunchtime$ToggleUserType(userType),
-			_elm_lang$core$Basics$toString(userType));
-	});
-var _ahstro$lunchtime$Lunchtime$ToggleChangeType = function (a) {
-	return {ctor: 'ToggleChangeType', _0: a};
-};
-var _ahstro$lunchtime$Lunchtime$viewChangeCheckbox = F2(
-	function (changeType, changeTypes) {
-		return A3(
-			_ahstro$lunchtime$Lunchtime$viewCheckbox,
-			A2(_elm_lang$core$List$member, changeType, changeTypes),
-			_ahstro$lunchtime$Lunchtime$ToggleChangeType(changeType),
-			_elm_lang$core$Basics$toString(changeType));
-	});
-var _ahstro$lunchtime$Lunchtime$Bot = {ctor: 'Bot'};
-var _ahstro$lunchtime$Lunchtime$Human = {ctor: 'Human'};
-var _ahstro$lunchtime$Lunchtime$Anonymous = {ctor: 'Anonymous'};
-var _ahstro$lunchtime$Lunchtime$User = F2(
-	function (a, b) {
-		return {ctor: 'User', _0: a, _1: b};
-	});
-var _ahstro$lunchtime$Lunchtime$Categorize = {ctor: 'Categorize'};
-var _ahstro$lunchtime$Lunchtime$Log = {ctor: 'Log'};
-var _ahstro$lunchtime$Lunchtime$New = {ctor: 'New'};
-var _ahstro$lunchtime$Lunchtime$Edit = {ctor: 'Edit'};
-var _ahstro$lunchtime$Lunchtime$init = {
-	ctor: '_Tuple2',
-	_0: {
-		changes: {ctor: '[]'},
-		bufferedChanges: {ctor: '[]'},
-		paused: false,
-		settings: {
-			changeTypes: {
-				ctor: '::',
-				_0: _ahstro$lunchtime$Lunchtime$Edit,
-				_1: {
-					ctor: '::',
-					_0: _ahstro$lunchtime$Lunchtime$New,
-					_1: {
-						ctor: '::',
-						_0: _ahstro$lunchtime$Lunchtime$Log,
-						_1: {
-							ctor: '::',
-							_0: _ahstro$lunchtime$Lunchtime$Categorize,
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			},
-			userTypes: {
-				ctor: '::',
-				_0: _ahstro$lunchtime$Lunchtime$Anonymous,
-				_1: {
-					ctor: '::',
-					_0: _ahstro$lunchtime$Lunchtime$Human,
-					_1: {
-						ctor: '::',
-						_0: _ahstro$lunchtime$Lunchtime$Bot,
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		}
-	},
-	_1: _elm_lang$core$Platform_Cmd$none
-};
-var _ahstro$lunchtime$Lunchtime$viewSettings = function (settings) {
+var _ahstro$lunchtime$Lunchtime_View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _ahstro$lunchtime$Lunchtime$class(
+			_0: _ahstro$lunchtime$Lunchtime_View$class(
 				{
 					ctor: '::',
-					_0: _ahstro$lunchtime$Style$Settings,
+					_0: _ahstro$lunchtime$Lunchtime_Style$Wrapper,
 					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _ahstro$lunchtime$Lunchtime$class(
-						{
-							ctor: '::',
-							_0: _ahstro$lunchtime$Style$Checkboxes,
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _ahstro$lunchtime$Lunchtime$viewCheckboxTitle('Change types:'),
-					_1: {
-						ctor: '::',
-						_0: A2(_ahstro$lunchtime$Lunchtime$viewChangeCheckbox, _ahstro$lunchtime$Lunchtime$Edit, settings.changeTypes),
-						_1: {
-							ctor: '::',
-							_0: A2(_ahstro$lunchtime$Lunchtime$viewChangeCheckbox, _ahstro$lunchtime$Lunchtime$New, settings.changeTypes),
-							_1: {
-								ctor: '::',
-								_0: A2(_ahstro$lunchtime$Lunchtime$viewChangeCheckbox, _ahstro$lunchtime$Lunchtime$Log, settings.changeTypes),
-								_1: {
-									ctor: '::',
-									_0: A2(_ahstro$lunchtime$Lunchtime$viewChangeCheckbox, _ahstro$lunchtime$Lunchtime$Categorize, settings.changeTypes),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}
-				}),
+			_0: _ahstro$lunchtime$Lunchtime_View$viewSettings(model.settings),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _ahstro$lunchtime$Lunchtime$class(
-							{
-								ctor: '::',
-								_0: _ahstro$lunchtime$Style$Checkboxes,
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _ahstro$lunchtime$Lunchtime$viewCheckboxTitle('User types:'),
-						_1: {
-							ctor: '::',
-							_0: A2(_ahstro$lunchtime$Lunchtime$viewUserCheckbox, _ahstro$lunchtime$Lunchtime$Anonymous, settings.userTypes),
-							_1: {
-								ctor: '::',
-								_0: A2(_ahstro$lunchtime$Lunchtime$viewUserCheckbox, _ahstro$lunchtime$Lunchtime$Human, settings.userTypes),
-								_1: {
-									ctor: '::',
-									_0: A2(_ahstro$lunchtime$Lunchtime$viewUserCheckbox, _ahstro$lunchtime$Lunchtime$Bot, settings.userTypes),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}),
+				_0: _ahstro$lunchtime$Lunchtime_View$viewChanges(model.changes),
 				_1: {ctor: '[]'}
 			}
 		});
 };
-var _ahstro$lunchtime$Lunchtime$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _ahstro$lunchtime$Lunchtime$class(
-				{
-					ctor: '::',
-					_0: _ahstro$lunchtime$Style$Wrapper,
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _ahstro$lunchtime$Lunchtime$viewSettings(model.settings),
-			_1: {
-				ctor: '::',
-				_0: _ahstro$lunchtime$Lunchtime$viewChanges(model.changes),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _ahstro$lunchtime$Lunchtime$changeDecoder = function () {
-	var computeUrl = F4(
-		function (changeType, serverUrl, serverScriptPath, revision) {
-			var computedUrl = function () {
-				var _p27 = revision;
-				if (_p27.ctor === 'Just') {
-					return A2(
-						_elm_lang$core$Basics_ops['++'],
-						serverUrl,
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							serverScriptPath,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'/index.php?diff=',
-								_elm_lang$core$Basics$toString(_p27._0.$new))));
-				} else {
-					return serverUrl;
-				}
-			}();
-			var _p28 = changeType;
-			_v15_2:
-			do {
-				if (_p28.ctor === 'Ok') {
-					switch (_p28._0.ctor) {
-						case 'Edit':
-							return computedUrl;
-						case 'New':
-							return computedUrl;
-						default:
-							break _v15_2;
-					}
-				} else {
-					break _v15_2;
-				}
-			} while(false);
-			return serverUrl;
-		});
-	var computeChangeType = function (changeType) {
-		var _p29 = changeType;
-		switch (_p29) {
-			case 'edit':
-				return _elm_lang$core$Result$Ok(_ahstro$lunchtime$Lunchtime$Edit);
-			case 'new':
-				return _elm_lang$core$Result$Ok(_ahstro$lunchtime$Lunchtime$New);
-			case 'categorize':
-				return _elm_lang$core$Result$Ok(_ahstro$lunchtime$Lunchtime$Categorize);
-			case 'log':
-				return _elm_lang$core$Result$Ok(_ahstro$lunchtime$Lunchtime$Log);
-			default:
-				return _elm_lang$core$Result$Err(
-					A2(_elm_lang$core$Basics_ops['++'], 'No such change type: ', changeType));
-		}
-	};
-	var computeUser = F2(
-		function (userName, isBot) {
-			var isAnonymous = A2(
-				_elm_lang$core$Regex$contains,
-				_elm_lang$core$Regex$regex('^\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}$'),
-				userName);
-			return isBot ? A2(_ahstro$lunchtime$Lunchtime$User, userName, _ahstro$lunchtime$Lunchtime$Bot) : (isAnonymous ? A2(_ahstro$lunchtime$Lunchtime$User, userName, _ahstro$lunchtime$Lunchtime$Anonymous) : A2(_ahstro$lunchtime$Lunchtime$User, userName, _ahstro$lunchtime$Lunchtime$Human));
-		});
-	var toChange = function (id) {
-		return function (changeType) {
-			return function (userName) {
-				return function (bot) {
-					return function (wiki) {
-						return function (serverName) {
-							return function (changeTitle) {
-								return function (comment) {
-									return function (serverUrl) {
-										return function (serverScriptPath) {
-											return function (revision) {
-												return function (length) {
-													var computedChangeType = computeChangeType(changeType);
-													return _elm_lang$core$Json_Decode$succeed(
-														_ahstro$lunchtime$Lunchtime$Change(id)(computedChangeType)(
-															A2(computeUser, userName, bot))(wiki)(serverName)(serverUrl)(changeTitle)(comment)(
-															A4(computeUrl, computedChangeType, serverUrl, serverScriptPath, revision))(revision)(length));
-												};
-											};
-										};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-	return _NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$resolve(
-		A3(
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'length',
-			_elm_lang$core$Json_Decode$nullable(_ahstro$lunchtime$Lunchtime$lengthDecoder),
-			A3(
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-				'revision',
-				_elm_lang$core$Json_Decode$nullable(_ahstro$lunchtime$Lunchtime$revisionDecoder),
-				A3(
-					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-					'server_script_path',
-					_elm_lang$core$Json_Decode$string,
-					A3(
-						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-						'server_url',
-						_elm_lang$core$Json_Decode$string,
-						A3(
-							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-							'comment',
-							_elm_lang$core$Json_Decode$string,
-							A3(
-								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-								'title',
-								_elm_lang$core$Json_Decode$string,
-								A3(
-									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-									'server_name',
-									_elm_lang$core$Json_Decode$string,
-									A3(
-										_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-										'wiki',
-										_elm_lang$core$Json_Decode$string,
-										A3(
-											_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-											'bot',
-											_elm_lang$core$Json_Decode$bool,
-											A3(
-												_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-												'user',
-												_elm_lang$core$Json_Decode$string,
-												A3(
-													_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-													'type',
-													_elm_lang$core$Json_Decode$string,
-													A3(
-														_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-														'id',
-														_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$int),
-														_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(toChange))))))))))))));
-}();
-var _ahstro$lunchtime$Lunchtime$decodeChange = function (json) {
-	var value = A2(_elm_lang$core$Json_Decode$decodeString, _ahstro$lunchtime$Lunchtime$changeDecoder, json);
-	var _p30 = value;
-	if (_p30.ctor === 'Ok') {
-		return _ahstro$lunchtime$Lunchtime$NewChange(_p30._0);
+
+var _ahstro$lunchtime$Lunchtime_Subscriptions$decodeChange = function (json) {
+	var value = A2(_elm_lang$core$Json_Decode$decodeString, _ahstro$lunchtime$Lunchtime_Change$changeDecoder, json);
+	var _p0 = value;
+	if (_p0.ctor === 'Ok') {
+		return _ahstro$lunchtime$Lunchtime_Update$NewChange(_p0._0);
 	} else {
-		return _ahstro$lunchtime$Lunchtime$NoOp;
+		return _ahstro$lunchtime$Lunchtime_Update$NoOp;
 	}
 };
-var _ahstro$lunchtime$Lunchtime$subscriptions = function (_p31) {
-	return _ahstro$lunchtime$Lunchtime$changes(_ahstro$lunchtime$Lunchtime$decodeChange);
+var _ahstro$lunchtime$Lunchtime_Subscriptions$changes = _elm_lang$core$Native_Platform.incomingPort('changes', _elm_lang$core$Json_Decode$string);
+var _ahstro$lunchtime$Lunchtime_Subscriptions$subscriptions = function (_p1) {
+	return _ahstro$lunchtime$Lunchtime_Subscriptions$changes(_ahstro$lunchtime$Lunchtime_Subscriptions$decodeChange);
 };
+
 var _ahstro$lunchtime$Lunchtime$main = _elm_lang$html$Html$program(
-	{init: _ahstro$lunchtime$Lunchtime$init, view: _ahstro$lunchtime$Lunchtime$view, update: _ahstro$lunchtime$Lunchtime$update, subscriptions: _ahstro$lunchtime$Lunchtime$subscriptions})();
-var _ahstro$lunchtime$Lunchtime$changeTypeDecoder = function () {
-	var decodeChangeType = function (changeType) {
-		var _p32 = changeType;
-		switch (_p32) {
-			case 'edit':
-				return _elm_lang$core$Json_Decode$succeed(_ahstro$lunchtime$Lunchtime$Edit);
-			case 'new':
-				return _elm_lang$core$Json_Decode$succeed(_ahstro$lunchtime$Lunchtime$New);
-			case 'categorize':
-				return _elm_lang$core$Json_Decode$succeed(_ahstro$lunchtime$Lunchtime$Categorize);
-			case 'log':
-				return _elm_lang$core$Json_Decode$succeed(_ahstro$lunchtime$Lunchtime$Log);
-			default:
-				return _elm_lang$core$Json_Decode$fail(
-					A2(_elm_lang$core$Basics_ops['++'], 'Not a valid change type: ', changeType));
-		}
-	};
-	return A2(_elm_lang$core$Json_Decode$andThen, decodeChangeType, _elm_lang$core$Json_Decode$string);
-}();
+	{init: _ahstro$lunchtime$Lunchtime_Model$init, view: _ahstro$lunchtime$Lunchtime_View$view, update: _ahstro$lunchtime$Lunchtime_Update$update, subscriptions: _ahstro$lunchtime$Lunchtime_Subscriptions$subscriptions})();
 
 var Elm = {};
 Elm['Lunchtime'] = Elm['Lunchtime'] || {};

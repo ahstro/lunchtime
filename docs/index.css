@@ -75,6 +75,10 @@ a {
     border: 1px solid #aaaaaa;
 }
 
+.lunchtimeChanges::-webkit-scrollbar {
+    display: none;
+}
+
 .lunchtimeChange {
     display: flex;
     align-items: center;
@@ -88,6 +92,10 @@ a {
 .lunchtimeTitle {
     color: #0645ad;
     margin: 0em 0.5em;
+}
+
+.lunchtimeTitle:visited {
+    color: #663366;
 }
 
 .lunchtimeTitle:hover {
