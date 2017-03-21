@@ -1,4 +1,4 @@
-#Lunchtime
+# Lunchtime
 
 This is a Wikimedia watcher thing, currently very similar to [wikistream](https://github.com/edsu/wikistream).
 
