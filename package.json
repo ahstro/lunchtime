@@ -7,9 +7,11 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "chokidar-cli": "^1.2.0",
     "elm-css": "^0.6.0"
   },
   "scripts": {
-    "build": "elm make src/Main.elm --output docs/lunchtime.js && elm-css src/Stylesheets.elm --output docs/ ; exit 0"
+    "build": "elm make src/Main.elm --output docs/lunchtime.js && elm-css src/Stylesheets.elm --output docs/ ; exit 0",
+    "watch": "chokidar '**/*.elm' -c 'npm run build'"
   }
 }
