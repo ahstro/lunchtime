@@ -7,6 +7,7 @@ import Css.Namespace
 
 type CssClasses
     = CheckboxLabel
+    | CheckboxInput
     | CheckboxTitle
     | Checkboxes
     | SiteCode
@@ -64,6 +65,9 @@ css =
                 [ displayFlex
                 , alignItems center
                 , marginLeft (em 0.5)
+                ]
+            , class CheckboxInput
+                [ marginRight (em 0.3)
                 ]
             , class CheckboxTitle
                 [ fontWeight bold

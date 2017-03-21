@@ -74,6 +74,7 @@ viewCheckbox chckd msg txt =
             [ checked chckd
             , type_ "checkbox"
             , onClick msg
+            , class [ Style.CheckboxInput ]
             ]
             []
         , text txt
